@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday [Friend's Name]!</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #ffe5ec, #ffc2d1);
+      text-align: center;
+      color: #333;
+    }
+    h1 {
+      font-size: 3em;
+      color: #d6336c;
+      margin-top: 40px;
+    }
+    p {
+      font-size: 1.2em;
+    }
+    .cake {
+      margin-top: 30px;
+    }
+    .button {
+      background-color: #ff6f91;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.1em;
+      color: white;
+      border-radius: 10px;
+      margin-top: 30px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .button:hover {
+      background-color: #ff4e7a;
+    }
+    .surprise {
+      display: none;
+      margin-top: 30px;
+      font-size: 1.5em;
+      color: #c9184a;
+      animation: fadeIn 2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    .gallery {
+      margin-top: 50px;
+    }
+    .gallery img {
+      width: 200px;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    footer {
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 Happy Birthday [Friend's Name]! 🎂</h1>
+  <p>Wishing you a day filled with laughter, joy, and cake! 🍰</p>
+
+  <div class="cake">
+    <img src="D:\\work files\\web dev\\krishna with tree.jpg" alt="Birthday Cake" width="300">
+  </div>
+
+  <button class="button" onclick="showSurprise()">🎁 Click for a Surprise</button>
+
+  <div class="surprise" id="surpriseMessage">
+    You are loved more than you know 💖<br> Have a magical year ahead! ✨
+  </div>
+
+  <div class="gallery">
+    <h2>📸 Some Fun Memories</h2>
+    <img src="https://i.imgur.com/qZ5rvq9.jpg" alt="Memory 1">
+    <img src="https://i.imgur.com/ukHjqwE.jpg" alt="Memory 2">
+    <img src="https://i.imgur.com/8WcTwOK.jpg" alt="Memory 3">
+  </div>
+
+  <footer>
+    Made with ❤️ for [Friend's Name] | &copy; 2025
+  </footer>
+
+  <script>
+    function showSurprise() {
+      document.getElementById('surpriseMessage').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
