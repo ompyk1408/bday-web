@@ -577,7 +577,7 @@
     </div>
 
     <div id='Content'>
-        <button id="audioToggle" style="position: fixed; top: 20px; right: 20px; z-index: 9999; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-size: 14px;">
+        <button id="audioToggle" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-size: 14px;">
   🔊 Mute
 </button>
 
@@ -681,9 +681,11 @@ audioToggle.addEventListener("click", () => {
     if (audio.muted) {
         audio.muted = false;
         audioToggle.innerHTML = "🔊 Mute";
+        logAnswer("Audio status", "Unmuted");
     } else {
-                    logAnswer("Anonymous answered", "Enter name: wrong (input: " + nama + ")");
         audio.muted = true;
+        audioToggle.innerHTML = "🔇 Unmute";
+        logAnswer("Audio status", "Muted");
         audioToggle.innerHTML = "🔇 Unmute";
     }
 });
@@ -706,6 +708,7 @@ audioToggle.addEventListener("click", () => {
     if (nama && nama.trim() === correctName) {
         logAnswer(nama + " answered", "Name Enter: Correct (input: " + nama + ")");
         audio.play();
+        document.getElementById("audioToggle").style.display = "block";
         window.nama = nama;
        // vketikhalo = "Hi, " + nama + " &#10084;";
        vketikhalo = "Hi, " + "Meri Pyari Hema" + " &#10084;";
@@ -818,7 +821,7 @@ async function menuju() { pesanwhatsapp = "Thank you for wishing " + nama + " a 
 
         async function mulainama() {
 
-            bodyblur.style = "opacity:.1";
+            bodyblur.style = "opacity:.7";
             wallpaper.style = "transform: scale(1);";
             fotostiker.style = "display:inline-flex;"; setTimeout(ftmuncul, 200);
             setTimeout(kethalo, 500);
