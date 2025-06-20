@@ -231,7 +231,6 @@ logAnswer("Puzzle", "Completed");
   }
 }
 </script>
-
 <title>OMPKY</title>
 <link href="https://www.palingit.com/favicon.ico" rel="icon" type="image/x-icon"/>
 <meta content="HTML Replit Coding" name="description"/>
@@ -1907,5 +1906,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
-</script></body>
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+        // Make sure puzzleGame is visible if it was triggered
+        if (document.getElementById("puzzleGame").style.display === "block") {
+            document.getElementById("puzz").style.display = "block";
+            document.getElementById("puzz").style.zIndex = "10000";
+            document.getElementById("puzz").style.position = "absolute";
+        }
+    }
+});
+</script>
+</body>
 </html>
