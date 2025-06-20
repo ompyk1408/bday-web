@@ -1215,7 +1215,31 @@ await swals.fire({
                     logAnswer("Color confirmed", "Blue");
                     await swals.fire('Okay!', `Now look at this &#10084;&#65039;`);
                     // mulainama();
-                    await swals.fire('Let’s play a short puzzle before we continue 🎲');
+                    
+swals.fire({
+  title: 'Let’s play a short puzzle before we continue 🎲',
+  confirmButtonText: 'Start Puzzle',
+  backdrop: true,
+  allowOutsideClick: false,
+  allowEscapeKey: false
+}).then(() => {
+  document.getElementById("Content").style.display = "none";
+  const puzzle = document.getElementById("puzzleGame");
+  puzzle.style.display = "flex";
+  puzzle.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  randomizeImage();
+
+  const checkPuzzleComplete = setInterval(() => {
+    if (document.querySelectorAll('.dropped').length === 9) {
+      clearInterval(checkPuzzleComplete);
+      document.getElementById("nextAfterPuzzle").style.display = "block";
+      document.getElementById("cutieLabel").style.display = "block";
+      logAnswer("Puzzle", "Completed");
+    }
+  }, 500);
+});
+return;
+
                     document.getElementById("Content").style.display = "none";
                     
 setTimeout(() => {
