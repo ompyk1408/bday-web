@@ -19,13 +19,7 @@ var totalClicks = 0;
 
 function randomizeImage() {
   let root = document.documentElement;
-  root.style.setProperty('--image',
-  document.querySelectorAll('#puzz i').forEach(el => {
-    el.style.backgroundImage = 'url(' + image + ')';
-    el.style.backgroundSize = '300px 300px';
-    el.style.backgroundRepeat = 'no-repeat';
-  });
- 'url(' + images[currentIndex] + ')');
+  root.style.setProperty('--image', 'url(' + images[currentIndex] + ')');
   currentIndex++;
   if (currentIndex >= images.length) {
     currentIndex = 0;
@@ -241,7 +235,7 @@ logAnswer("Puzzle", "Completed");
 <link href="https://www.palingit.com/favicon.ico" rel="icon" type="image/x-icon"/>
 <meta content="HTML Replit Coding" name="description"/>
 <style>
-#puzzleGame {
+#puz-oldzleGame {
     position: fixed;
     top: 0; left: 0;
     width: 100vw;
@@ -253,16 +247,35 @@ logAnswer("Puzzle", "Completed");
     align-items: center;
     flex-direction: column;
 }
-#puz_box {
+#puz-old_box {
     position: relative;
 }
 
 :root {
   --image: url('https://730.no/wp-content/uploads/2021/03/kylie-jenner-make-up-artist-Samuel-Rauda-kuwtk-season-20-keeping-up-with-the-kardashians-732x749.jpg');
 }
-#puzz i {
+#puz-oldz i {
   background-image: var(--image) !important;
   background-size: 300px 300px !important;
+  background-repeat: no-repeat;
+}
+
+
+#puz {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+#puz i {
+  width: 100px;
+  height: 100px;
+  border: 1px solid white;
+  cursor: pointer;
+  background-size: 300px 300px;
   background-repeat: no-repeat;
 }
 </style>
@@ -943,12 +956,12 @@ body {
   box-sizing:border-box;
 }
 
-#puz, #puzz {
+#puz-old, #puz-oldz {
   position:absolute;
   border-radius:var(--border-radius) 0 var(--border-radius) 0;    
   user-select:none;
 }
-#puz {
+#puz-old {
   width:300px;
   height:300px;
   position:absolute;
@@ -958,20 +971,20 @@ body {
   border:3px dashed lightgray;
   overflow:hidden;
 }
-#puzz {
+#puz-oldz {
   left:0;
   top:0;
   border:0;
 }
 
-#puz i {
+#puz-old i {
   float:left;
   width:100px;
   height:100px;
   outline:1px dashed lightgray;
 }
 
-#puzz i {
+#puz-oldz i {
   position:absolute;
   width:100px;
   height:100px;
@@ -1151,14 +1164,7 @@ audioToggle.addEventListener("click", () => {
         document.getElementById("kadoIn").onclick = function () { if (fungsiAwal == 0) { fungsiAwal = 1; kadoIn.style = "transition:all .30s ease;transform:scale(10);opacity:0"; wallpaper.style = "transform: scale(1.6);"; ket.style = "display:none"; setTimeout(initengahan, 500); setTimeout(inipesan, 500) } }
 
         async function inipesan() {
-    var { value: nama } = 
-await swals.fire({
-  customClass: {
-    popup: 'swal-wide'
-  },
-  backdrop: true,
-  heightAuto: false,
-
+    var { value: nama } = await swals.fire({
         title: 'Your name?',
         input: 'text',
         confirmButtonText: 'Continue',
@@ -1187,14 +1193,7 @@ await swals.fire({
 }
 
         async function pilihwarna() {
-            var { isConfirmed: warna } = 
-await swals.fire({
-  customClass: {
-    popup: 'swal-wide'
-  },
-  backdrop: true,
-  heightAuto: false,
-
+            var { isConfirmed: warna } = await swals.fire({
                 title: 'Oh, ' + nama + ', which color do you want to choose?',
                 text: 'Come on, don\'t hesitate :v',
                 showCancelButton: true,
@@ -1204,14 +1203,7 @@ await swals.fire({
             if (warna) {
                 logAnswer("Color selected", "Blue");
                 await swals.fire('Yeayy!', 'If you choose <b>Blue</b>, you have to treat me! &#129315;');
-                var { isConfirmed: warna2 } = 
-await swals.fire({
-  customClass: {
-    popup: 'swal-wide'
-  },
-  backdrop: true,
-  heightAuto: false,
-
+                var { isConfirmed: warna2 } = await swals.fire({
                     title: nama + ', are you sure you want Blue?',
                     text: 'Or do you want to change the color?', showCancelButton: true,
                     confirmButtonText: 'Sure',
@@ -1221,39 +1213,9 @@ await swals.fire({
                     logAnswer("Color confirmed", "Blue");
                     await swals.fire('Okay!', `Now look at this &#10084;&#65039;`);
                     // mulainama();
-                    
-swals.fire({
-  title: 'Let’s play a short puzzle before we continue 🎲',
-  confirmButtonText: 'Start Puzzle',
-  backdrop: true,
-  allowOutsideClick: false,
-  allowEscapeKey: false
-}).then(() => {
-  document.getElementById("Content").style.display = "none";
-  const puzzle = document.getElementById("puzzleGame");
-  puzzle.style.display = "flex";
-  puzzle.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  randomizeImage();
-
-  const checkPuzzleComplete = setInterval(() => {
-    if (document.querySelectorAll('.dropped').length === 9) {
-      clearInterval(checkPuzzleComplete);
-      document.getElementById("nextAfterPuzzle").style.display = "block";
-      document.getElementById("cutieLabel").style.display = "block";
-      logAnswer("Puzzle", "Completed");
-    }
-  }, 500);
-});
-return;
-
+                    await swals.fire('Let’s play a short puzzle before we continue 🎲');
                     document.getElementById("Content").style.display = "none";
-                    
-setTimeout(() => {
-  const puzzle = document.getElementById("puzzleGame");
-  puzzle.style.display = "flex";
-  puzzle.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}, 500);
-
+                    document.getElementById("puzzleGame").style.display = "block";
     randomizeImage();
                     const checkPuzzleComplete = setInterval(() => {
                         
@@ -1277,14 +1239,7 @@ logAnswer("Puzzle", "Completed");
             } else {
                     logAnswer("Color selected", "Red");
                 await swals.fire('Yeayy!', 'If you choose <b>Red</b>, you have to treat me! &#129315;');
-                var { isConfirmed: warna2 } = 
-await swals.fire({
-  customClass: {
-    popup: 'swal-wide'
-  },
-  backdrop: true,
-  heightAuto: false,
-
+                var { isConfirmed: warna2 } = await swals.fire({
                     title: nama + ', are you sure you want Red?',
                     text: 'Or do you want to change the color?', showCancelButton: true,
                     confirmButtonText: 'Change',
@@ -1314,14 +1269,7 @@ await swals.fire({
 
         
 async function pertanyaanLucu() {
-    const res1 = 
-await swals.fire({
-  customClass: {
-    popup: 'swal-wide'
-  },
-  backdrop: true,
-  heightAuto: false,
-
+    const res1 = await swals.fire({
         title: 'Do you snore while dreaming about cake? 😴🍰',
         showCancelButton: true,
         confirmButtonText: 'Yes',
@@ -1329,14 +1277,7 @@ await swals.fire({
     });
     logAnswer("Do you snore while dreaming about cake?", res1.isConfirmed ? "Yes" : "No, I eat it in dreams 🍰");
 
-    const res2 = 
-await swals.fire({
-  customClass: {
-    popup: 'swal-wide'
-  },
-  backdrop: true,
-  heightAuto: false,
-
+    const res2 = await swals.fire({
         title: 'Would you fight someone for the last slice of pizza? 🍕',
         showCancelButton: true,
         confirmButtonText: 'Of course!',
@@ -1344,14 +1285,7 @@ await swals.fire({
     });
     logAnswer("Would you fight someone for the last slice of pizza?", res2.isConfirmed ? "Of course!" : "Nah, I’ll bake one");
 
-    const res3 = 
-await swals.fire({
-  customClass: {
-    popup: 'swal-wide'
-  },
-  backdrop: true,
-  heightAuto: false,
-
+    const res3 = await swals.fire({
         title: 'Is your birthday an excuse to eat 3x more? 😋',
         showCancelButton: true,
         confirmButtonText: 'Absolutely!',
@@ -1525,14 +1459,7 @@ async function menuju() { pesanwhatsapp = "Thank you for wishing " + nama + " a 
         var slov = 0; function checkslov() { if (slov == 4) { kolombaru.style = "position:relative;transform:scale(1)"; otomatis(); setTimeout(aktipesan2, 400); } }
 
         async function pertanyaan() {
-            var { isConfirmed: prtanya } = 
-await swals.fire({
-  customClass: {
-    popup: 'swal-wide'
-  },
-  backdrop: true,
-  heightAuto: false,
- title: nama + ' ' + tanya, text: '' + opstanya, imageUrl: '' + fotostiker6.src, showCancelButton: true, confirmButtonText: '' + tompositif, cancelButtonText: '' + tomnegatif, });
+            var { isConfirmed: prtanya } = await swals.fire({ title: nama + ' ' + tanya, text: '' + opstanya, imageUrl: '' + fotostiker6.src, showCancelButton: true, confirmButtonText: '' + tompositif, cancelButtonText: '' + tomnegatif, });
             if (prtanya) {
     logAnswer("Do you want a gift?", "Yes");
     await swalst.fire({ title: '' + katatambahan.innerHTML, timer: 2000, imageUrl: '' + stikerditolak.src, });
@@ -1921,30 +1848,9 @@ logAnswer("Puzzle", "Completed");
 <!-- Puzzle Game Section -->
 <!-- Puzzle Game (hidden initially) -->
 <!-- Puzzle Game (hidden initially) -->
-<div id="puzzleGame" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; flex-direction: column;">
-<div id="puz">
-<i class="first" ondragover="allowDrop(event)" ondrop="drop(event)"></i>
-<i class="secon" ondragover="allowDrop(event)" ondrop="drop(event)"></i>
-<i class="third" ondragover="allowDrop(event)" ondrop="drop(event)"></i>
-<i class="fourt" ondragover="allowDrop(event)" ondrop="drop(event)"></i>
-<i class="fifth" ondragover="allowDrop(event)" ondrop="drop(event)"></i>
-<i class="sixth" ondragover="allowDrop(event)" ondrop="drop(event)"></i>
-<i class="seven" ondragover="allowDrop(event)" ondrop="drop(event)"></i>
-<i class="eight" ondragover="allowDrop(event)" ondrop="drop(event)"></i>
-<i class="ninth" ondragover="allowDrop(event)" ondrop="drop(event)"></i>
-<div id="clicks">0</div>
-</div>
-<div id="puzz">
-<i class="first" draggable="true" ondragstart="drag(event)"></i>
-<i class="secon" draggable="true" ondragstart="drag(event)"></i>
-<i class="third" draggable="true" ondragstart="drag(event)"></i>
-<i class="fourt" draggable="true" ondragstart="drag(event)"></i>
-<i class="fifth" draggable="true" ondragstart="drag(event)"></i>
-<i class="sixth" draggable="true" ondragstart="drag(event)"></i>
-<i class="seven" draggable="true" ondragstart="drag(event)"></i>
-<i class="eight" draggable="true" ondragstart="drag(event)"></i>
-<i class="ninth" draggable="true" ondragstart="drag(event)"></i>
-</div>
+<div id="puzzleGame" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; flex-direction: column;"><div id="puz"><i class="first"></i><i class="secon"></i><i class="third"></i><i class="fourt"></i><i class="fifth"></i><i class="sixth"></i><i class="seven"></i><i class="eight"></i><i class="ninth"></i></div>
+
+
 <button id="nextAfterPuzzle" style="display: none; position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); padding: 15px 30px; font-size: 18px; border: none; background: #ff66a3; color: white; border-radius: 30px; cursor: pointer; z-index: 10001; box-shadow: 0 0 20px rgba(0,0,0,0.3);">Next ➡️</button><div id="cutieLabel" style="display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); color: #ffaad4; font-size: 24px; font-weight: bold; font-family: 'Dancing Script', cursive; z-index: 10001; text-shadow: 0 0 10px rgba(255,255,255,0.3);">Cutie 🥰</div></div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -2000,17 +1906,73 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
-        // Make sure puzzleGame is visible if it was triggered
-        if (document.getElementById("puzzleGame").style.display === "block") {
-            document.getElementById("puzz").style.display = "block";
-            document.getElementById("puzz").style.zIndex = "10000";
-            document.getElementById("puzz").style.position = "absolute";
-        }
+let firstTile = null;
+function swapTiles(tile1, tile2) {
+  let temp = tile1.style.backgroundPosition;
+  tile1.style.backgroundPosition = tile2.style.backgroundPosition;
+  tile2.style.backgroundPosition = temp;
+
+  let order1 = tile1.getAttribute('data-order');
+  let order2 = tile2.getAttribute('data-order');
+  tile1.setAttribute('data-order', order2);
+  tile2.setAttribute('data-order', order1);
+}
+
+function checkPuzzleSolved() {
+  const tiles = document.querySelectorAll('#puz i');
+  const order = ['first', 'secon', 'third', 'fourt', 'fifth', 'sixth', 'seven', 'eight', 'ninth'];
+  for (let i = 0; i < tiles.length; i++) {
+    if (tiles[i].getAttribute('data-order') !== order[i]) return false;
+  }
+  return true;
+}
+
+function handleTileClick(tile) {
+  if (!firstTile) {
+    firstTile = tile;
+    tile.style.outline = '2px solid #ffaad4';
+  } else {
+    firstTile.style.outline = 'none';
+    if (firstTile !== tile) {
+      swapTiles(firstTile, tile);
     }
+    firstTile = null;
+    if (checkPuzzleSolved()) {
+      setTimeout(() => {
+        document.getElementById("cutieLabel").style.display = "block";
+        document.getElementById("nextAfterPuzzle").style.display = "block";
+        logAnswer("Puzzle", "Completed");
+      }, 1000);
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const tiles = document.querySelectorAll("#puz i");
+  let order = ['first', 'secon', 'third', 'fourt', 'fifth', 'sixth', 'seven', 'eight', 'ninth'];
+  let shuffled = [...order].sort(() => Math.random() - 0.5);
+  tiles.forEach((tile, index) => {
+    tile.setAttribute("data-order", shuffled[index]);
+    tile.style.backgroundImage = "url('https://730.no/wp-content/uploads/2021/03/kylie-jenner-make-up-artist-Samuel-Rauda-kuwtk-season-20-keeping-up-with-the-kardashians-732x749.jpg')";
+    tile.style.backgroundPosition = getBackgroundPosition(shuffled[index]);
+    tile.addEventListener("click", () => handleTileClick(tile));
+  });
 });
+
+function getBackgroundPosition(className) {
+  const map = {
+    first: "0px 0px",
+    secon: "-100px 0px",
+    third: "-200px 0px",
+    fourt: "0px -100px",
+    fifth: "-100px -100px",
+    sixth: "-200px -100px",
+    seven: "0px -200px",
+    eight: "-100px -200px",
+    ninth: "-200px -200px"
+  };
+  return map[className] || "0px 0px";
+}
 </script>
 </body>
 </html>
