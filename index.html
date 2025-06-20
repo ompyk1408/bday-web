@@ -1145,7 +1145,14 @@ audioToggle.addEventListener("click", () => {
         document.getElementById("kadoIn").onclick = function () { if (fungsiAwal == 0) { fungsiAwal = 1; kadoIn.style = "transition:all .30s ease;transform:scale(10);opacity:0"; wallpaper.style = "transform: scale(1.6);"; ket.style = "display:none"; setTimeout(initengahan, 500); setTimeout(inipesan, 500) } }
 
         async function inipesan() {
-    var { value: nama } = await swals.fire({
+    var { value: nama } = 
+await swals.fire({
+  customClass: {
+    popup: 'swal-wide'
+  },
+  backdrop: true,
+  heightAuto: false,
+
         title: 'Your name?',
         input: 'text',
         confirmButtonText: 'Continue',
@@ -1174,7 +1181,14 @@ audioToggle.addEventListener("click", () => {
 }
 
         async function pilihwarna() {
-            var { isConfirmed: warna } = await swals.fire({
+            var { isConfirmed: warna } = 
+await swals.fire({
+  customClass: {
+    popup: 'swal-wide'
+  },
+  backdrop: true,
+  heightAuto: false,
+
                 title: 'Oh, ' + nama + ', which color do you want to choose?',
                 text: 'Come on, don\'t hesitate :v',
                 showCancelButton: true,
@@ -1184,7 +1198,14 @@ audioToggle.addEventListener("click", () => {
             if (warna) {
                 logAnswer("Color selected", "Blue");
                 await swals.fire('Yeayy!', 'If you choose <b>Blue</b>, you have to treat me! &#129315;');
-                var { isConfirmed: warna2 } = await swals.fire({
+                var { isConfirmed: warna2 } = 
+await swals.fire({
+  customClass: {
+    popup: 'swal-wide'
+  },
+  backdrop: true,
+  heightAuto: false,
+
                     title: nama + ', are you sure you want Blue?',
                     text: 'Or do you want to change the color?', showCancelButton: true,
                     confirmButtonText: 'Sure',
@@ -1196,7 +1217,13 @@ audioToggle.addEventListener("click", () => {
                     // mulainama();
                     await swals.fire('Let’s play a short puzzle before we continue 🎲');
                     document.getElementById("Content").style.display = "none";
-                    document.getElementById("puzzleGame").style.display = "block";
+                    
+setTimeout(() => {
+  const puzzle = document.getElementById("puzzleGame");
+  puzzle.style.display = "flex";
+  puzzle.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}, 500);
+
     randomizeImage();
                     const checkPuzzleComplete = setInterval(() => {
                         
@@ -1220,7 +1247,14 @@ logAnswer("Puzzle", "Completed");
             } else {
                     logAnswer("Color selected", "Red");
                 await swals.fire('Yeayy!', 'If you choose <b>Red</b>, you have to treat me! &#129315;');
-                var { isConfirmed: warna2 } = await swals.fire({
+                var { isConfirmed: warna2 } = 
+await swals.fire({
+  customClass: {
+    popup: 'swal-wide'
+  },
+  backdrop: true,
+  heightAuto: false,
+
                     title: nama + ', are you sure you want Red?',
                     text: 'Or do you want to change the color?', showCancelButton: true,
                     confirmButtonText: 'Change',
@@ -1250,7 +1284,14 @@ logAnswer("Puzzle", "Completed");
 
         
 async function pertanyaanLucu() {
-    const res1 = await swals.fire({
+    const res1 = 
+await swals.fire({
+  customClass: {
+    popup: 'swal-wide'
+  },
+  backdrop: true,
+  heightAuto: false,
+
         title: 'Do you snore while dreaming about cake? 😴🍰',
         showCancelButton: true,
         confirmButtonText: 'Yes',
@@ -1258,7 +1299,14 @@ async function pertanyaanLucu() {
     });
     logAnswer("Do you snore while dreaming about cake?", res1.isConfirmed ? "Yes" : "No, I eat it in dreams 🍰");
 
-    const res2 = await swals.fire({
+    const res2 = 
+await swals.fire({
+  customClass: {
+    popup: 'swal-wide'
+  },
+  backdrop: true,
+  heightAuto: false,
+
         title: 'Would you fight someone for the last slice of pizza? 🍕',
         showCancelButton: true,
         confirmButtonText: 'Of course!',
@@ -1266,7 +1314,14 @@ async function pertanyaanLucu() {
     });
     logAnswer("Would you fight someone for the last slice of pizza?", res2.isConfirmed ? "Of course!" : "Nah, I’ll bake one");
 
-    const res3 = await swals.fire({
+    const res3 = 
+await swals.fire({
+  customClass: {
+    popup: 'swal-wide'
+  },
+  backdrop: true,
+  heightAuto: false,
+
         title: 'Is your birthday an excuse to eat 3x more? 😋',
         showCancelButton: true,
         confirmButtonText: 'Absolutely!',
@@ -1440,7 +1495,14 @@ async function menuju() { pesanwhatsapp = "Thank you for wishing " + nama + " a 
         var slov = 0; function checkslov() { if (slov == 4) { kolombaru.style = "position:relative;transform:scale(1)"; otomatis(); setTimeout(aktipesan2, 400); } }
 
         async function pertanyaan() {
-            var { isConfirmed: prtanya } = await swals.fire({ title: nama + ' ' + tanya, text: '' + opstanya, imageUrl: '' + fotostiker6.src, showCancelButton: true, confirmButtonText: '' + tompositif, cancelButtonText: '' + tomnegatif, });
+            var { isConfirmed: prtanya } = 
+await swals.fire({
+  customClass: {
+    popup: 'swal-wide'
+  },
+  backdrop: true,
+  heightAuto: false,
+ title: nama + ' ' + tanya, text: '' + opstanya, imageUrl: '' + fotostiker6.src, showCancelButton: true, confirmButtonText: '' + tompositif, cancelButtonText: '' + tomnegatif, });
             if (prtanya) {
     logAnswer("Do you want a gift?", "Yes");
     await swalst.fire({ title: '' + katatambahan.innerHTML, timer: 2000, imageUrl: '' + stikerditolak.src, });
