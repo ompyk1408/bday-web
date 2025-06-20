@@ -19,7 +19,13 @@ var totalClicks = 0;
 
 function randomizeImage() {
   let root = document.documentElement;
-  root.style.setProperty('--image', 'url(' + images[currentIndex] + ')');
+  root.style.setProperty('--image',
+  document.querySelectorAll('#puzz i').forEach(el => {
+    el.style.backgroundImage = 'url(' + image + ')';
+    el.style.backgroundSize = '300px 300px';
+    el.style.backgroundRepeat = 'no-repeat';
+  });
+ 'url(' + images[currentIndex] + ')');
   currentIndex++;
   if (currentIndex >= images.length) {
     currentIndex = 0;
