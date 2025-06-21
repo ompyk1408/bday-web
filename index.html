@@ -834,8 +834,19 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
     }
 
 
+</style><style>
+@keyframes popscale {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2) rotate(-3deg); }
+  100% { transform: scale(1); }
+}
+</style><style>
+@keyframes pulse {
+  0% { transform: scale(1); color: #ffffff; text-shadow: 0 0 10px #fc5c7d; }
+  50% { transform: scale(1.1); color: #ff99cc; text-shadow: 0 0 20px #ff99cc; }
+  100% { transform: scale(1); color: #ffffff; text-shadow: 0 0 10px #fc5c7d; }
+}
 </style></head>
-
 <body>
 <!-- Ganti Audio di sini -->
 <audio id="linkmp3" loop="" src="./assets/kuch to hone laga.mp3"></audio>
@@ -1242,16 +1253,16 @@ async function menuju() { pesanwhatsapp = "Thank you for wishing " + nama + " a 
     padding: 15px 30px; font-size: 18px; border: none; background: #fc5c7d; color: white;
     border-radius: 30px; cursor: pointer; z-index: 10001; box-shadow: 0 0 20px rgba(0,0,0,0.3);">Next ➡️</button>
 </div>
-<div id="puzzleContainer">
+<div id="puzzleIntro" style="display: none; flex-direction: column; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; color: white; z-index: 9999; font-family: 'Dancing Script', cursive;"><div id="puzzleMessage" style="font-size: 2em; animation: pulse 1.5s infinite alternate ease-in-out; margin-bottom: 30px; text-align: center;">Let's play a small Puzzle game</div><button id="startPuzzleBtn" style="padding: 12px 30px; font-size: 18px; background: #fc5c7d; color: white; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.3);">Start 🧩</button></div><div id="puzzleContainer">
 <div>🧩 Tap two tiles to swap them!</div>
 <div id="tapPuzzleBoard"></div>
-<div id="completePuzzleMsg" style="display:none;">🎉 Puzzle Complete! 🎉</div>
+<div id="completePuzzleMsg" style="display:none;"><div id="cutieText" style="font-size: 24px; font-weight: bold; margin-bottom: 10px; animation: popscale 1.5s infinite alternate ease-in-out; color: #ff99cc; text-shadow: 0 0 10px #fff, 0 0 20px #fc5c7d;">Cutie🥰</div><button id="continueAfterPuzzle" style="padding: 10px 25px; font-size: 16px; background: #fc5c7d; color: white; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.3);">Next ➡️</button></div>
 </div><script>
 let firstTile = null;
 
 function showPuzzle() {
     document.getElementById("Content").style.display = "none";
-    document.getElementById("puzzleContainer").style.display = "flex";
+    document.getElementById("puzzleIntro").style.display = "flex";
     setupTapSwapPuzzle();
 }
 
@@ -1593,6 +1604,36 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
     document.getElementById("galleryContainer").style.display = "none";
     document.getElementById("Content").style.display = "block";
     menuju();
+});
+</script><script>
+// Overwrite the puzzle check logic to show custom message and Next button
+function checkTapPuzzleSolved() {
+    const tiles = document.querySelectorAll("#tapPuzzleBoard .tap-tile");
+    let isSolved = true;
+    tiles.forEach((tile, i) => {
+        if (parseInt(tile.dataset.index) !== i) isSolved = false;
+    });
+
+    if (isSolved) {
+        const completeMsg = document.getElementById("completePuzzleMsg");
+        completeMsg.style.display = "flex";
+        completeMsg.style.flexDirection = "column";
+        completeMsg.style.alignItems = "center";
+        completeMsg.style.justifyContent = "center";
+    }
+}
+
+// When NEXT is clicked, return to full birthday message flow
+document.getElementById("continueAfterPuzzle").addEventListener("click", function() {
+    document.getElementById("puzzleContainer").style.display = "none";
+    document.getElementById("Content").style.display = "block";
+    mulainama();
+});
+</script><script>
+document.getElementById("startPuzzleBtn").addEventListener("click", function () {
+    document.getElementById("puzzleIntro").style.display = "none";
+    document.getElementById("puzzleContainer").style.display = "flex";
+    setupTapSwapPuzzle();
 });
 </script></body>
 </html>
