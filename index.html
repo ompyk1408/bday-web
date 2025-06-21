@@ -830,87 +830,55 @@ audioToggle.addEventListener("click", () => {
 }
 
         async function pilihwarna() {
-            var { isConfirmed: warna } = await swals.fire({
-                title: 'Oh, ' + nama + ', which color do you want to choose?',
-                text: 'Come on, don\'t hesitate :v',
-                showCancelButton: true,
-                confirmButtonText: 'Blue',
-                cancelButtonText: 'Red',
-            });
-            if (warna) {
-                logAnswer("Color selected", "Blue");
-                await swals.fire('Yeayy!', 'If you choose <b>Blue</b>, you have to treat me! &#129315;');
-                var { isConfirmed: warna2 } = await swals.fire({
-                    title: nama + ', are you sure you want Blue?',
-                    text: 'Or do you want to change the color?', showCancelButton: true,
-                    confirmButtonText: 'Sure',
-                    cancelButtonText: 'Change',
-                });
-                if (warna2) {
-                    logAnswer("Color confirmed", "Blue");
-                    await swals.fire('Okay!', `Now look at this &#10084;&#65039;`);
-                    showPuzzle();
-                } else {
-                    logAnswer("Color changed", "Red");
-                    await swals.fire('Okay, choosing Red!', 'It\'s actually the same, but if you choose Red, you have to treat me more! &#129315;');
-                    mulainama();
-                }
-            } else {
-                    logAnswer("Color selected", "Red");
-                await swals.fire('Yeayy!', 'If you choose <b>Red</b>, you have to treat me! &#129315;');
-                var { isConfirmed: warna2 } = await swals.fire({
-                    title: nama + ', are you sure you want Red?',
-                    text: 'Or do you want to change the color?', showCancelButton: true,
-                    confirmButtonText: 'Change',
-                    cancelButtonText: 'Sure',
-                });
-                if (warna2) {
-                    logAnswer("Color confirmed", "Blue");
-                    await swals.fire('Okay, choosing Blue!', 'It\'s actually the same, but if you choose Blue, you have to treat me more! &#129315;');
-                    mulainama();
-                } else {
-                    logAnswer("Color confirmed", "Red");
-                    await swals.fire('Okay!', `Now look at this`);
-                    showPuzzle();
-                }
-            }
+    const { value: warna } = await swals.fire({
+        title: "Which color do you like more?",
+        confirmButtonText: "Blue 💙",
+        showDenyButton: true,
+        denyButtonText: "Red ❤️",
+        allowOutsideClick: false,
+        backdrop: `rgba(0,0,123,0.4)`,
+    });
+
+    if (warna) {
+        logAnswer("Color confirmed", "Blue");
+
+        const { isConfirmed } = await swals.fire({
+            title: "Sure about Blue?",
+            confirmButtonText: "Yes",
+            showDenyButton: true,
+            denyButtonText: "No, Red actually",
+            allowOutsideClick: false,
+        });
+
+        if (isConfirmed) {
+            await swals.fire('Okay!', `Now look at this ❤️`);
+            showPuzzle();
+        } else {
+            logAnswer("Color changed", "Red");
+            await swals.fire('Okay, choosing Red!', 'It's actually the same, but if you choose Red, you have to treat me more! 😂');
+            showPuzzle();
         }
 
+    } else {
+        logAnswer("Color confirmed", "Red");
 
+        const { isConfirmed } = await swals.fire({
+            title: "Sure about Red?",
+            confirmButtonText: "Yes",
+            showDenyButton: true,
+            denyButtonText: "No, Blue actually",
+            allowOutsideClick: false,
+        });
 
-        
-
-        //Variable Pertanyaan Akhir
-        var tanya = 'Do you want a gift? ';
-        var opstanya = 'Please answer';
-        var tompositif = 'Yes';
-        var tomnegatif = 'Yes Yes Yes &#10084;';
-
-        
-async function pertanyaanLucu() {
-    const res1 = await swals.fire({
-        title: 'Do you snore while dreaming about cake? 😴🍰',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No, I eat it in dreams 🍰'
-    });
-    logAnswer("Do you snore while dreaming about cake?", res1.isConfirmed ? "Yes" : "No, I eat it in dreams 🍰");
-
-    const res2 = await swals.fire({
-        title: 'Would you fight someone for the last slice of pizza? 🍕',
-        showCancelButton: true,
-        confirmButtonText: 'Of course!',
-        cancelButtonText: 'Nah, I’ll bake one'
-    });
-    logAnswer("Would you fight someone for the last slice of pizza?", res2.isConfirmed ? "Of course!" : "Nah, I’ll bake one");
-
-    const res3 = await swals.fire({
-        title: 'Is your birthday an excuse to eat 3x more? 😋',
-        showCancelButton: true,
-        confirmButtonText: 'Absolutely!',
-        cancelButtonText: 'No comment...'
-    });
-    logAnswer("Is your birthday an excuse to eat 3x more?", res3.isConfirmed ? "Absolutely!" : "No comment...");
+        if (isConfirmed) {
+            await swals.fire('Okay!', `Now look at this`);
+            showPuzzle();
+        } else {
+            logAnswer("Color changed", "Blue");
+            await swals.fire('Okay, choosing Blue!', 'It's actually the same, but if you choose Blue, you have to treat me more! 😂');
+            showPuzzle();
+        }
+    }
 }
 
 
