@@ -1253,7 +1253,7 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
 });
 </script>
 
-<!-- Drag-to-Swap Puzzle Game -->
+<!-- Tap-to-Swap Puzzle Game (Mobile Friendly) -->
 <style>
 #puzzleContainer {
     display: none;
@@ -1269,7 +1269,7 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
     color: white;
 }
 
-#swapPuzzleBoard {
+#tapPuzzleBoard {
     display: grid;
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
@@ -1277,13 +1277,19 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
     margin-top: 20px;
 }
 
-.swap-tile {
+.tap-tile {
     width: 100px;
     height: 100px;
     background-image: url('puzzle-image.jpg');
     background-size: 300px 300px;
     border: 1px solid white;
-    cursor: grab;
+    box-sizing: border-box;
+    transition: transform 0.2s;
+}
+
+.tap-tile.selected {
+    outline: 3px solid #0f0;
+    transform: scale(1.05);
 }
 
 #completePuzzleMsg {
@@ -1294,59 +1300,36 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
 </style>
 
 <div id="puzzleContainer">
-    <div>🧩 Swap the pieces into the correct order!</div>
-    <div id="swapPuzzleBoard"></div>
+    <div>🧩 Tap two tiles to swap them!</div>
+    <div id="tapPuzzleBoard"></div>
     <div id="completePuzzleMsg" style="display:none;">🎉 Puzzle Complete! 🎉</div>
 </div>
 
 <script>
+let firstTile = null;
+
 function showPuzzle() {
     document.getElementById("Content").style.display = "none";
     document.getElementById("puzzleContainer").style.display = "flex";
-    setupSwapPuzzle();
+    setupTapSwapPuzzle();
 }
 
-function setupSwapPuzzle() {
-    const board = document.getElementById("swapPuzzleBoard");
+function setupTapSwapPuzzle() {
+    const board = document.getElementById("tapPuzzleBoard");
     board.innerHTML = "";
+    firstTile = null;
 
     const indices = [...Array(9).keys()];
     shuffleArray(indices);
 
-    indices.forEach(index => {
+    indices.forEach((index, position) => {
         const tile = document.createElement("div");
-        tile.className = "swap-tile";
-        tile.draggable = true;
+        tile.className = "tap-tile";
         tile.dataset.index = index;
+        tile.dataset.position = position;
         tile.style.backgroundPosition = `-${(index % 3) * 100}px -${Math.floor(index / 3) * 100}px`;
 
-        tile.ondragstart = (e) => {
-            e.dataTransfer.setData("text/plain", e.target.dataset.index);
-        };
-
-        tile.ondragover = (e) => e.preventDefault();
-
-        tile.ondrop = (e) => {
-            const draggedIndex = e.dataTransfer.getData("text/plain");
-            const droppedIndex = e.target.dataset.index;
-
-            if (draggedIndex === droppedIndex) return;
-
-            const allTiles = Array.from(board.children);
-            const draggedTile = allTiles.find(t => t.dataset.index === draggedIndex);
-            const droppedTile = e.target;
-
-            const tempBG = draggedTile.style.backgroundPosition;
-            draggedTile.style.backgroundPosition = droppedTile.style.backgroundPosition;
-            droppedTile.style.backgroundPosition = tempBG;
-
-            const tempData = draggedTile.dataset.index;
-            draggedTile.dataset.index = droppedTile.dataset.index;
-            droppedTile.dataset.index = tempData;
-
-            checkSwapPuzzleSolved();
-        };
-
+        tile.addEventListener("click", () => handleTileTap(tile));
         board.appendChild(tile);
     });
 }
@@ -1358,8 +1341,34 @@ function shuffleArray(arr) {
     }
 }
 
-function checkSwapPuzzleSolved() {
-    const tiles = document.querySelectorAll("#swapPuzzleBoard .swap-tile");
+function handleTileTap(tile) {
+    if (!firstTile) {
+        firstTile = tile;
+        tile.classList.add("selected");
+    } else if (tile === firstTile) {
+        tile.classList.remove("selected");
+        firstTile = null;
+    } else {
+        // Swap styles and indices
+        const tempIndex = tile.dataset.index;
+        const tempBG = tile.style.backgroundPosition;
+
+        tile.dataset.index = firstTile.dataset.index;
+        tile.style.backgroundPosition = firstTile.style.backgroundPosition;
+
+        firstTile.dataset.index = tempIndex;
+        firstTile.style.backgroundPosition = tempBG;
+
+        tile.classList.remove("selected");
+        firstTile.classList.remove("selected");
+        firstTile = null;
+
+        checkTapPuzzleSolved();
+    }
+}
+
+function checkTapPuzzleSolved() {
+    const tiles = document.querySelectorAll("#tapPuzzleBoard .tap-tile");
     let isSolved = true;
     tiles.forEach((tile, i) => {
         if (parseInt(tile.dataset.index) !== i) isSolved = false;
