@@ -1,298 +1,24 @@
 <!DOCTYPE html>
-
 <html>
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5" name="viewport"/>
-<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Antique:wght@400;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js">
+    <meta charset='UTF-8' />
+    <meta content='width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5'
+        name='viewport' />
+    <meta content='IE=edge' http-equiv='X-UA-Compatible' />
 
-/* === Puzzle Game Script === */
-var images = ['https://730.no/wp-content/uploads/2021/03/kylie-jenner-make-up-artist-Samuel-Rauda-kuwtk-season-20-keeping-up-with-the-kardashians-732x749.jpg'];
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Antique:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+    <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
+    <script src="https://kit.fontawesome.com/4f3ce16e3e.js" crossorigin="anonymous"></script>
+    <title>OMPKY</title>
+    <link rel="icon" type="image/x-icon" href="https://www.palingit.com/favicon.ico">
+    <meta name="description" content="HTML Replit Coding">
+</head>
 
-var currentIndex = 0;
-var totalClicks = 0;
-
-function randomizeImage() {
-  let root = document.documentElement;
-  root.style.setProperty('--image', 'url(' + images[currentIndex] + ')');
-  currentIndex++;
-  if (currentIndex >= images.length) {
-    currentIndex = 0;
-  }
-  var puzzleItems = document.querySelectorAll('#puzz i');
-  for (var i = 0; i < puzzleItems.length; i++) {
-    puzzleItems[i].style.left = Math.random() * (window.innerWidth - 100) + 'px';
-    puzzleItems[i].style.top = Math.random() * (window.innerHeight - 100) + 'px';
-  }
-}
-
-function reloadPuzzle() {
-  var doneItems = document.querySelectorAll('.done');
-  doneItems.forEach(function (element) {
-    element.classList.toggle('done');
-  });
-  var droppedItems = document.querySelectorAll('.dropped');
-  droppedItems.forEach(function (element) {
-    element.classList.toggle('dropped');
-  });
-  var allDoneElement = document.querySelector('.allDone');
-  allDoneElement.style = '';
-  allDoneElement.classList.toggle('allDone');
-}
-
-// mobile functionality
-var puzzleItemsMobile = document.querySelectorAll('#puzz i');
-puzzleItemsMobile.forEach(function (element) {
-  element.addEventListener('mousedown', function () {
-    totalClicks++;
-    document.querySelector('#clicks').innerHTML = totalClicks;
-  });
-  element.addEventListener('click', function () {
-    if (document.querySelector('.clicked')) {
-      document.querySelector('.clicked').classList.toggle('clicked');
-      element.classList.toggle('clicked');
-    } else {
-      element.classList.toggle('clicked');
-    }
-  });
-});
-
-var puzzleItemsDesktop = document.querySelectorAll('#puz i');
-puzzleItemsDesktop.forEach(function (element) {
-  element.addEventListener('click', function () {
-    if (document.querySelector('.clicked')) {
-      var clickedElement = document.querySelector('.clicked');
-      if (clickedElement.classList.contains(element.classList)) {
-        element.classList.add('dropped');
-        clickedElement.classList.add('done');
-        clickedElement.classList.toggle('clicked');
-
-        if (document.querySelectorAll('.dropped').length == 9) {
-          document.querySelector('#puz').classList.add('allDone');
-          document.querySelector('#puz').style.border = 'none';
-          document.querySelector('#puz').style.animation = 'allDone 1s linear forwards';
-
-          setTimeout(function () {
-        document.getElementById("nextAfterPuzzle").style.display = "block";
-document.getElementById("cutieLabel").style.display = "block";
-logAnswer("Puzzle", "Completed");
-logAnswer("Puzzle", "Completed");
-    }, 2000);
-        }
-      }
-    }
-  });
-});
-
-// desktop drag and drop
-function allowDrop(ev) {
-  ev.preventDefault();
-}
-
-function drag(ev) {
-  ev.dataTransfer.setData("text", ev.target.className);
-}
-
-function drop(ev) {
-  ev.preventDefault();
-  var data = ev.dataTransfer.getData("text");
-
-  if (ev.target.className == data) {
-    ev.target.classList.add('dropped');
-    document.querySelector('.' + data + "[draggable='true']").classList.add('done');
-
-    if (document.querySelectorAll('.dropped').length == 9) {
-      document.querySelector('#puz').classList.add('allDone');
-      document.querySelector('#puz').style.border = 'none';
-      document.querySelector('#puz').style.animation = 'allDone 1s linear forwards';
-
-      setTimeout(function () {
-        document.getElementById("nextAfterPuzzle").style.display = "block";
-document.getElementById("cutieLabel").style.display = "block";
-logAnswer("Puzzle", "Completed");
-logAnswer("Puzzle", "Completed");
-    }, 2000);
-    }
-  }
-}
-</script>
-<script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js">
-
-/* === Puzzle Game Script === */
-var images = ['https://730.no/wp-content/uploads/2021/03/kylie-jenner-make-up-artist-Samuel-Rauda-kuwtk-season-20-keeping-up-with-the-kardashians-732x749.jpg'];
-
-var currentIndex = 0;
-var totalClicks = 0;
-
-function randomizeImage() {
-  let root = document.documentElement;
-  root.style.setProperty('--image', 'url(' + images[currentIndex] + ')');
-  currentIndex++;
-  if (currentIndex >= images.length) {
-    currentIndex = 0;
-  }
-  var puzzleItems = document.querySelectorAll('#puzz i');
-  for (var i = 0; i < puzzleItems.length; i++) {
-    puzzleItems[i].style.left = Math.random() * (window.innerWidth - 100) + 'px';
-    puzzleItems[i].style.top = Math.random() * (window.innerHeight - 100) + 'px';
-  }
-}
-
-function reloadPuzzle() {
-  var doneItems = document.querySelectorAll('.done');
-  doneItems.forEach(function (element) {
-    element.classList.toggle('done');
-  });
-  var droppedItems = document.querySelectorAll('.dropped');
-  droppedItems.forEach(function (element) {
-    element.classList.toggle('dropped');
-  });
-  var allDoneElement = document.querySelector('.allDone');
-  allDoneElement.style = '';
-  allDoneElement.classList.toggle('allDone');
-}
-
-// mobile functionality
-var puzzleItemsMobile = document.querySelectorAll('#puzz i');
-puzzleItemsMobile.forEach(function (element) {
-  element.addEventListener('mousedown', function () {
-    totalClicks++;
-    document.querySelector('#clicks').innerHTML = totalClicks;
-  });
-  element.addEventListener('click', function () {
-    if (document.querySelector('.clicked')) {
-      document.querySelector('.clicked').classList.toggle('clicked');
-      element.classList.toggle('clicked');
-    } else {
-      element.classList.toggle('clicked');
-    }
-  });
-});
-
-var puzzleItemsDesktop = document.querySelectorAll('#puz i');
-puzzleItemsDesktop.forEach(function (element) {
-  element.addEventListener('click', function () {
-    if (document.querySelector('.clicked')) {
-      var clickedElement = document.querySelector('.clicked');
-      if (clickedElement.classList.contains(element.classList)) {
-        element.classList.add('dropped');
-        clickedElement.classList.add('done');
-        clickedElement.classList.toggle('clicked');
-
-        if (document.querySelectorAll('.dropped').length == 9) {
-          document.querySelector('#puz').classList.add('allDone');
-          document.querySelector('#puz').style.border = 'none';
-          document.querySelector('#puz').style.animation = 'allDone 1s linear forwards';
-
-          setTimeout(function () {
-  document.getElementById("nextAfterPuzzle").style.display = "block";
-document.getElementById("cutieLabel").style.display = "block";
-logAnswer("Puzzle", "Completed");
-}, 2000);
-        }
-      }
-    }
-  });
-});
-
-// desktop drag and drop
-function allowDrop(ev) {
-  ev.preventDefault();
-}
-
-function drag(ev) {
-  ev.dataTransfer.setData("text", ev.target.className);
-}
-
-function drop(ev) {
-  ev.preventDefault();
-  var data = ev.dataTransfer.getData("text");
-
-  if (ev.target.className == data) {
-    ev.target.classList.add('dropped');
-    document.querySelector('.' + data + "[draggable='true']").classList.add('done');
-
-    if (document.querySelectorAll('.dropped').length == 9) {
-      document.querySelector('#puz').classList.add('allDone');
-      document.querySelector('#puz').style.border = 'none';
-      document.querySelector('#puz').style.animation = 'allDone 1s linear forwards';
-
-      setTimeout(function () {
-  document.getElementById("nextAfterPuzzle").style.display = "block";
-document.getElementById("cutieLabel").style.display = "block";
-logAnswer("Puzzle", "Completed");
-}, 2000);
-    }
-  }
-}
-</script>
-<title>OMPKY</title>
-<link href="https://www.palingit.com/favicon.ico" rel="icon" type="image/x-icon"/>
-<meta content="HTML Replit Coding" name="description"/>
-<style>
-#puz-oldzleGame {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 99999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-#puz-old_box {
-    position: relative;
-}
-
-:root {
-  --image: url('https://730.no/wp-content/uploads/2021/03/kylie-jenner-make-up-artist-Samuel-Rauda-kuwtk-season-20-keeping-up-with-the-kardashians-732x749.jpg');
-}
-#puz-oldz i {
-  background-image: var(--image) !important;
-  background-size: 300px 300px !important;
-  background-repeat: no-repeat;
-}
-
-
-#puz {
-  display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-template-rows: repeat(3, 100px);
-  gap: 4px;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-#puz i {
-  width: 100px;
-  height: 100px;
-  border: 1px solid white;
-  cursor: pointer;
-  background-size: 300px 300px;
-  background-repeat: no-repeat;
-}
-</style>
-<script>
-function logAnswer(question, answer) {
-    fetch("https://12214ff0-7b81-4e9d-8baf-c249983b82d6-00-crx2inu2pz0h.sisko.replit.dev/log", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            name: window.nama || "Anonymous",
-            question: question,
-            answer: answer,
-            time: new Date().toLocaleString()
-        })
-    }).catch(err => console.error("Logging failed:", err));
-}
-</script></head>
 <style>
 
 /* === Gallery Styles Injected === */
@@ -942,188 +668,99 @@ function logAnswer(question, answer) {
     }
 
 
-
-/* === Puzzle Game Styles === */
-:root {
-  --color:rgb(0, 0, 0);
-  --border-radius:10px;
-}
-
-body {
-  background:#000000;
-  padding:0;
-  margin:0;
-  box-sizing:border-box;
-}
-
-#puz-old, #puz-oldz {
-  position:absolute;
-  border-radius:var(--border-radius) 0 var(--border-radius) 0;    
-  user-select:none;
-}
-#puz-old {
-  width:300px;
-  height:300px;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  border:3px dashed lightgray;
-  overflow:hidden;
-}
-#puz-oldz {
-  left:0;
-  top:0;
-  border:0;
-}
-
-#puz-old i {
-  float:left;
-  width:100px;
-  height:100px;
-  outline:1px dashed lightgray;
-}
-
-#puz-oldz i {
-  position:absolute;
-  width:100px;
-  height:100px;
-  background:var(--color);
-  background-image:var(--image);
-  background-size:300px 300px;
-  cursor:move;
-  box-shadow:0 0 10px rgba(0,0,0,.25);
-}
-
-.first {
-  border-top-left-radius:var(--border-radius);
-  background-position:left top !important;
-}
-.secon {
-  background-position:center top !important;
-}
-.third {
-/*   border-top-right-radius:var(--border-radius); */
-  background-position:right top !important;
-}
-.fourt {
-  background-position:left center !important;
-}
-.fifth {
-  background-position:center center !important;
-}
-.sixth {  
-  background-position:right center !important;
-}
-.seven {
-/*   border-bottom-left-radius:var(--border-radius); */
-  background-position:left bottom !important;
-}
-.eight {
-  background-position:center bottom !important;
-}
-.ninth {
-  border-bottom-right-radius:var(--border-radius);
-  background-position:right bottom !important;
-}
-
-.clicked {
-  box-shadow:0 0 0 4px gray !important;
-}
-
-.dropped {
-  background:var(--color);
-  background-image:var(--image);
-  background-size:300px 300px;
-}
-.done {
-  opacity:0;
-  pointer-events:none;
-}
-
-.allDone {
-  animation:allDone 1s linear forwards;
-  border:3px solid lightgray !important;
-}
-.allDone i {
-  outline:0 !important;
-}
-
-@keyframes allDone {
-  50% { transform:translate(-50%,-50%) scale(1.2); }
-}
-
-#clicks {
-  font-size:8px;
-  font-family:monospace;
-  position:absolute;
-  bottom:5px;
-  right:5px;
-}
 </style>
+
 <body>
-<!-- Ganti Audio di sini -->
-<audio id="linkmp3" loop="" src="./assets/kuch to hone laga.mp3"></audio>
-<div id="bodyblur">
-<!-- Wallpaper --><img id="wallpaper" src="./assets/wp.jpg"/>
-<div id="beneranblur"></div>
-</div>
-<div id="Content">
-<button id="audioToggle" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-size: 14px;">
+
+    <!-- Ganti Audio di sini -->
+    <audio id="linkmp3" src="./assets/kuch to hone laga.mp3" loop></audio>
+
+
+    <div id="bodyblur">
+        <!-- Wallpaper --><img src="./assets/wp.jpg" id="wallpaper" />
+        <div id="beneranblur"></div>
+    </div>
+
+    <div id='Content'>
+        <button id="audioToggle" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-size: 14px;">
   🔊 Mute
 </button>
-<div id="kadoIn">
-<!-- Tombol Surat --><img src="./assets/kadoin.png"/>
-</div>
-<p id="ket">Click the Gift!</p>
-<div class="kumpulanstiker">
-<!-- Stiker untuk Konten -->
-<img id="fotostiker" src="./assets/bunga.gif"/>
-<img id="fotostiker1" src="./assets/pusn.gif"/>
-<img id="fotostiker2" src="./assets/pandacoklat.gif"/>
-<img id="fotostiker3" src="./assets/cilukba.gif"/>
-<img id="fotostiker4" src="./assets/pandakuning.gif"/>
-<img id="fotostiker5" src="./assets/emawh.gif"/>
-<img id="fotostiker6" src="./assets/pandacoklat.gif"/>
-</div>
-<p class="halo" id="halo"></p>
-<div>
-<blockquote data-text="❤" id="bq">
-<p id="kalimat">I have something for you, turn up the volume, dear ❤</p>
-<p id="pesan1">Tap here for your birthday surprise! 🎉❤</p>
-<div id="kolombaru">
-<li id="lv1">🎂</li>
-<li id="lv2">🎁</li>
-<li id="lv3">🥳</li>
-<li id="lv4">🤍</li>
-</div>
-<p id="pesan2">Wait...</p>
-<!-- Pesan -->
-<p id="pesan3">Hey.. it's your birthday! ❤</p>
-<p id="pesan4">Happy Birthday Gussail Hema</p>
-<p class="gaya2" id="pesan5">Getting older, getting cuter hehe</p>
-<p class="gaya2" id="pesan6">Wishing you a long life, stay healthy dear wkwk ❤</p>
-<p class="gaya2" id="pesan7">Hope your fortune keeps flowing, until you don't know how to spend it!</p>
-<p class="gaya2" id="pesan8">Souuuuuuuu.....</p>
-<p class="gaya2" id="pesan9">Hope you’re happy on your special day, you must be happy! I worked hard to
-                    make this, I even learned how to do it! ❤</p>
-<p class="gaya2" id="pesan10">Thank you for being my biggest support, caring about me, and always being
-                    there for me. Love you, dear. ❤</p>
-<!-- Tombol Lanjut -->
-<p id="opsL">Click to Continue</p>
-</blockquote>
-</div>
-<!-- Tombol Kirim Pesan -->
-<div id="Tombol"><a id="By">💌 Continue</a></div>
-<!-- Pesan Tambahan -->
-<p class="sembunyi" id="katatambahan">Just Kidding Heheheh 😂</p>
-<!-- Pesan Ditolak -->
-<div id="pesanditolak">
-<img id="stikerditolak" src="./assets/weee.gif"/>
-<p id="kataditolak">Just Kidding Heheheh 😂</p>
-</div>
-</div>
-<script>
+
+
+        <div id="kadoIn">
+            <!-- Tombol Surat --><img src="./assets/kadoin.png" />
+        </div>
+        <p id="ket">Click the Gift!</p>
+       
+
+
+        <div class="kumpulanstiker">
+            <!-- Stiker untuk Konten -->
+            <img src="./assets/bunga.gif" id="fotostiker" />
+            <img src="./assets/pusn.gif" id="fotostiker1" />
+            <img src="./assets/pandacoklat.gif" id="fotostiker2" />
+            <img src="./assets/cilukba.gif" id="fotostiker3" />
+            <img src="./assets/pandakuning.gif" id="fotostiker4" />
+            <img src="./assets/emawh.gif" id="fotostiker5" />
+
+            <img src="./assets/pandacoklat.gif" id="fotostiker6" />
+        </div>
+
+        <p id="halo" class="halo"></p>
+
+        <div>
+            <blockquote id='bq' data-text='&#10084;'>
+                <p id="kalimat">I have something for you, turn up the volume, dear &#10084;</p>
+
+                <p id="pesan1">Tap here for your birthday surprise! 🎉&#10084;</p>
+                <div id="kolombaru">
+                        <li id="lv1">🎂</li>
+                        <li id="lv2">🎁</li>
+                        <li id="lv3">🥳</li>
+                        <li id="lv4">🤍</li>
+                </div>
+
+                <p id="pesan2">Wait...</p>
+                <!-- Pesan -->
+                <p id="pesan3">Hey.. it's your birthday! &#10084;</p>
+                <p id="pesan4">Happy Birthday Gussail Hema</p>
+                <p id="pesan5" class="gaya2">Getting older, getting cuter hehe</p>
+                <p id="pesan6" class="gaya2">Wishing you a long life, stay healthy dear wkwk &#10084;</p>
+                <p id="pesan7" class="gaya2">Hope your fortune keeps flowing, until you don't know how to spend it!</p>
+
+                <p id="pesan8" class="gaya2">Souuuuuuuu.....</p>
+                <p id="pesan9" class="gaya2">Hope you’re happy on your special day, you must be happy! I worked hard to
+                    make this, I even learned how to do it! &#10084;</p>
+                <p id="pesan10" class="gaya2">Thank you for being my biggest support, caring about me, and always being
+                    there for me. Love you, dear. &#10084;</p>
+
+                <!-- Tombol Lanjut -->
+                <p id="opsL">Click to Continue</p>
+            </blockquote>
+        </div>
+
+        <!-- Tombol Kirim Pesan -->
+        <div id="Tombol"><a id="By">&#128140; Continue</a></div>
+
+        <!-- Pesan Tambahan -->
+        <p id="katatambahan" class="sembunyi">Just Kidding Heheheh 😂</p>
+
+        <!-- Pesan Ditolak -->
+        <div id="pesanditolak">
+            <img id="stikerditolak" src="./assets/weee.gif" />
+            <p id="kataditolak">Just Kidding Heheheh 😂</p>
+        </div>
+
+
+
+        
+
+    </div>
+
+
+    
+
+    <script>
 function logAnswer(question, answer) {
 function logGiftResponse(answer) {
     logAnswer("Do you want a gift?", answer);
@@ -1212,25 +849,7 @@ audioToggle.addEventListener("click", () => {
                 if (warna2) {
                     logAnswer("Color confirmed", "Blue");
                     await swals.fire('Okay!', `Now look at this &#10084;&#65039;`);
-                    // mulainama();
-                    await swals.fire('Let’s play a short puzzle before we continue 🎲');
-                    document.getElementById("Content").style.display = "none";
-                    document.getElementById("puzzleGame").style.display = "block";
-    randomizeImage();
-                    const checkPuzzleComplete = setInterval(() => {
-                        
-if (document.querySelectorAll('.dropped').length === 9) {
-    clearInterval(checkPuzzleComplete);
-    document.getElementById("nextAfterPuzzle").style.display = "block";
-document.getElementById("cutieLabel").style.display = "block";
-logAnswer("Puzzle", "Completed");
-
-                            clearInterval(checkPuzzleComplete);
-                            
-                        }
-                    }, 500);
-                    return;
-
+                    showPuzzle();
                 } else {
                     logAnswer("Color changed", "Red");
                     await swals.fire('Okay, choosing Red!', 'It\'s actually the same, but if you choose Red, you have to treat me more! &#129315;');
@@ -1471,134 +1090,32 @@ async function menuju() { pesanwhatsapp = "Thank you for wishing " + nama + " a 
 }
         }
 
-    
+    </script>
+    <!-- Sampai Sini -->
 
-/* === Puzzle Game Script === */
-var images = ['https://730.no/wp-content/uploads/2021/03/kylie-jenner-make-up-artist-Samuel-Rauda-kuwtk-season-20-keeping-up-with-the-kardashians-732x749.jpg'];
 
-var currentIndex = 0;
-var totalClicks = 0;
-
-function randomizeImage() {
-  let root = document.documentElement;
-  root.style.setProperty('--image', 'url(' + images[currentIndex] + ')');
-  currentIndex++;
-  if (currentIndex >= images.length) {
-    currentIndex = 0;
-  }
-  var puzzleItems = document.querySelectorAll('#puzz i');
-  for (var i = 0; i < puzzleItems.length; i++) {
-    puzzleItems[i].style.left = Math.random() * (window.innerWidth - 100) + 'px';
-    puzzleItems[i].style.top = Math.random() * (window.innerHeight - 100) + 'px';
-  }
-}
-
-function reloadPuzzle() {
-  var doneItems = document.querySelectorAll('.done');
-  doneItems.forEach(function (element) {
-    element.classList.toggle('done');
-  });
-  var droppedItems = document.querySelectorAll('.dropped');
-  droppedItems.forEach(function (element) {
-    element.classList.toggle('dropped');
-  });
-  var allDoneElement = document.querySelector('.allDone');
-  allDoneElement.style = '';
-  allDoneElement.classList.toggle('allDone');
-}
-
-// mobile functionality
-var puzzleItemsMobile = document.querySelectorAll('#puzz i');
-puzzleItemsMobile.forEach(function (element) {
-  element.addEventListener('mousedown', function () {
-    totalClicks++;
-    document.querySelector('#clicks').innerHTML = totalClicks;
-  });
-  element.addEventListener('click', function () {
-    if (document.querySelector('.clicked')) {
-      document.querySelector('.clicked').classList.toggle('clicked');
-      element.classList.toggle('clicked');
-    } else {
-      element.classList.toggle('clicked');
-    }
-  });
-});
-
-var puzzleItemsDesktop = document.querySelectorAll('#puz i');
-puzzleItemsDesktop.forEach(function (element) {
-  element.addEventListener('click', function () {
-    if (document.querySelector('.clicked')) {
-      var clickedElement = document.querySelector('.clicked');
-      if (clickedElement.classList.contains(element.classList)) {
-        element.classList.add('dropped');
-        clickedElement.classList.add('done');
-        clickedElement.classList.toggle('clicked');
-
-        if (document.querySelectorAll('.dropped').length == 9) {
-          document.querySelector('#puz').classList.add('allDone');
-          document.querySelector('#puz').style.border = 'none';
-          document.querySelector('#puz').style.animation = 'allDone 1s linear forwards';
-
-          setTimeout(function () {
-  document.getElementById("nextAfterPuzzle").style.display = "block";
-document.getElementById("cutieLabel").style.display = "block";
-logAnswer("Puzzle", "Completed");
-}, 2000);
-        }
-      }
-    }
-  });
-});
-
-// desktop drag and drop
-function allowDrop(ev) {
-  ev.preventDefault();
-}
-
-function drag(ev) {
-  ev.dataTransfer.setData("text", ev.target.className);
-}
-
-function drop(ev) {
-  ev.preventDefault();
-  var data = ev.dataTransfer.getData("text");
-
-  if (ev.target.className == data) {
-    ev.target.classList.add('dropped');
-    document.querySelector('.' + data + "[draggable='true']").classList.add('done');
-
-    if (document.querySelectorAll('.dropped').length == 9) {
-      document.querySelector('#puz').classList.add('allDone');
-      document.querySelector('#puz').style.border = 'none';
-      document.querySelector('#puz').style.animation = 'allDone 1s linear forwards';
-
-      setTimeout(function () {
-  document.getElementById("nextAfterPuzzle").style.display = "block";
-document.getElementById("cutieLabel").style.display = "block";
-logAnswer("Puzzle", "Completed");
-}, 2000);
-    }
-  }
-}
-</script>
-<!-- Sampai Sini -->
 <!-- Gallery Section with Welcome Message -->
 <div id="galleryContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 9999; color: white; font-family: 'Dancing Script', cursive;">
-<div id="welcomeMessage" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 2.2em; text-align: center;">
+  <div id="welcomeMessage" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 2.2em; text-align: center;">
     Welcome to Our Gallery ❤️
   </div>
-<div class="ambient-light"></div>
-<div class="spotlight"></div>
-<div class="stars"></div>
-<button aria-label="Previous" class="nav-button prev"></button>
-<button aria-label="Next" class="nav-button next"></button>
-<div class="gallery-container" style="display: none;">
-<div class="gallery"></div>
-</div>
-<button id="nextAfterGallery" style="display: none; position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+
+  <div class="ambient-light"></div>
+  <div class="spotlight"></div>
+  <div class="stars"></div>
+  <button class="nav-button prev" aria-label="Previous"></button>
+  <button class="nav-button next" aria-label="Next"></button>
+
+  <div class="gallery-container" style="display: none;">
+      <div class="gallery"></div>
+  </div>
+
+  <button id="nextAfterGallery" style="display: none; position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
     padding: 15px 30px; font-size: 18px; border: none; background: #fc5c7d; color: white;
     border-radius: 30px; cursor: pointer; z-index: 10001; box-shadow: 0 0 20px rgba(0,0,0,0.3);">Next ➡️</button>
 </div>
+
+
 <script>
 // === Gallery Logic (fixed placement) ===
 function createStars() {
@@ -1734,245 +1251,132 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
     document.getElementById("Content").style.display = "block";
     menuju();
 });
-
-
-/* === Puzzle Game Script === */
-var images = ['https://730.no/wp-content/uploads/2021/03/kylie-jenner-make-up-artist-Samuel-Rauda-kuwtk-season-20-keeping-up-with-the-kardashians-732x749.jpg'];
-
-var currentIndex = 0;
-var totalClicks = 0;
-
-function randomizeImage() {
-  let root = document.documentElement;
-  root.style.setProperty('--image', 'url(' + images[currentIndex] + ')');
-  currentIndex++;
-  if (currentIndex >= images.length) {
-    currentIndex = 0;
-  }
-  var puzzleItems = document.querySelectorAll('#puzz i');
-  for (var i = 0; i < puzzleItems.length; i++) {
-    puzzleItems[i].style.left = Math.random() * (window.innerWidth - 100) + 'px';
-    puzzleItems[i].style.top = Math.random() * (window.innerHeight - 100) + 'px';
-  }
-}
-
-function reloadPuzzle() {
-  var doneItems = document.querySelectorAll('.done');
-  doneItems.forEach(function (element) {
-    element.classList.toggle('done');
-  });
-  var droppedItems = document.querySelectorAll('.dropped');
-  droppedItems.forEach(function (element) {
-    element.classList.toggle('dropped');
-  });
-  var allDoneElement = document.querySelector('.allDone');
-  allDoneElement.style = '';
-  allDoneElement.classList.toggle('allDone');
-}
-
-// mobile functionality
-var puzzleItemsMobile = document.querySelectorAll('#puzz i');
-puzzleItemsMobile.forEach(function (element) {
-  element.addEventListener('mousedown', function () {
-    totalClicks++;
-    document.querySelector('#clicks').innerHTML = totalClicks;
-  });
-  element.addEventListener('click', function () {
-    if (document.querySelector('.clicked')) {
-      document.querySelector('.clicked').classList.toggle('clicked');
-      element.classList.toggle('clicked');
-    } else {
-      element.classList.toggle('clicked');
-    }
-  });
-});
-
-var puzzleItemsDesktop = document.querySelectorAll('#puz i');
-puzzleItemsDesktop.forEach(function (element) {
-  element.addEventListener('click', function () {
-    if (document.querySelector('.clicked')) {
-      var clickedElement = document.querySelector('.clicked');
-      if (clickedElement.classList.contains(element.classList)) {
-        element.classList.add('dropped');
-        clickedElement.classList.add('done');
-        clickedElement.classList.toggle('clicked');
-
-        if (document.querySelectorAll('.dropped').length == 9) {
-          document.querySelector('#puz').classList.add('allDone');
-          document.querySelector('#puz').style.border = 'none';
-          document.querySelector('#puz').style.animation = 'allDone 1s linear forwards';
-
-          setTimeout(function () {
-  document.getElementById("nextAfterPuzzle").style.display = "block";
-document.getElementById("cutieLabel").style.display = "block";
-logAnswer("Puzzle", "Completed");
-}, 2000);
-        }
-      }
-    }
-  });
-});
-
-// desktop drag and drop
-function allowDrop(ev) {
-  ev.preventDefault();
-}
-
-function drag(ev) {
-  ev.dataTransfer.setData("text", ev.target.className);
-}
-
-function drop(ev) {
-  ev.preventDefault();
-  var data = ev.dataTransfer.getData("text");
-
-  if (ev.target.className == data) {
-    ev.target.classList.add('dropped');
-    document.querySelector('.' + data + "[draggable='true']").classList.add('done');
-
-    if (document.querySelectorAll('.dropped').length == 9) {
-      document.querySelector('#puz').classList.add('allDone');
-      document.querySelector('#puz').style.border = 'none';
-      document.querySelector('#puz').style.animation = 'allDone 1s linear forwards';
-
-      setTimeout(function () {
-  document.getElementById("nextAfterPuzzle").style.display = "block";
-document.getElementById("cutieLabel").style.display = "block";
-logAnswer("Puzzle", "Completed");
-}, 2000);
-    }
-  }
-}
 </script>
-<!-- Puzzle Game Section -->
-<!-- Puzzle Game Section -->
-<!-- Puzzle Game (hidden initially) -->
-<!-- Puzzle Game (hidden initially) -->
-<div id="puzzleGame" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; flex-direction: column;"><div id="puz"><i class="first"></i><i class="secon"></i><i class="third"></i><i class="fourt"></i><i class="fifth"></i><i class="sixth"></i><i class="seven"></i><i class="eight"></i><i class="ninth"></i></div>
 
+<!-- Drag-to-Swap Puzzle Game -->
+<style>
+#puzzleContainer {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #000;
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Shippori Antique', sans-serif;
+    color: white;
+}
 
-<button id="nextAfterPuzzle" style="display: none; position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); padding: 15px 30px; font-size: 18px; border: none; background: #ff66a3; color: white; border-radius: 30px; cursor: pointer; z-index: 10001; box-shadow: 0 0 20px rgba(0,0,0,0.3);">Next ➡️</button><div id="cutieLabel" style="display: none; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); color: #ffaad4; font-size: 24px; font-weight: bold; font-family: 'Dancing Script', cursive; z-index: 10001; text-shadow: 0 0 10px rgba(255,255,255,0.3);">Cutie 🥰</div></div>
+#swapPuzzleBoard {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 4px;
+    margin-top: 20px;
+}
+
+.swap-tile {
+    width: 100px;
+    height: 100px;
+    background-image: url('puzzle-image.jpg');
+    background-size: 300px 300px;
+    border: 1px solid white;
+    cursor: grab;
+}
+
+#completePuzzleMsg {
+    margin-top: 20px;
+    color: #0f0;
+    font-size: 20px;
+}
+</style>
+
+<div id="puzzleContainer">
+    <div>🧩 Swap the pieces into the correct order!</div>
+    <div id="swapPuzzleBoard"></div>
+    <div id="completePuzzleMsg" style="display:none;">🎉 Puzzle Complete! 🎉</div>
+</div>
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const nextPuzzleBtn = document.getElementById("nextAfterPuzzle");
-  const observer = new MutationObserver(() => {
-    const droppedCount = document.querySelectorAll('.dropped').length;
-    if (droppedCount === 9) {
-      nextPuzzleBtn.style.display = "block";
-    }
-  });
-  observer.observe(document.getElementById("puz"), { childList: true, subtree: true });
-  nextPuzzleBtn.addEventListener("click", () => {
-    document.getElementById("puzzleGame").style.display = "none";
-    document.getElementById("Content").style.display = "block";
-    mulainama();
-  });
-});
-</script><script>
-document.addEventListener('DOMContentLoaded', function () {
-  const nextBtn = document.getElementById("nextAfterPuzzle");
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
-      document.getElementById("puzzleGame").style.display = "none";
-      document.getElementById("Content").style.display = "block";
-      mulainama();
+function showPuzzle() {
+    document.getElementById("Content").style.display = "none";
+    document.getElementById("puzzleContainer").style.display = "flex";
+    setupSwapPuzzle();
+}
+
+function setupSwapPuzzle() {
+    const board = document.getElementById("swapPuzzleBoard");
+    board.innerHTML = "";
+
+    const indices = [...Array(9).keys()];
+    shuffleArray(indices);
+
+    indices.forEach(index => {
+        const tile = document.createElement("div");
+        tile.className = "swap-tile";
+        tile.draggable = true;
+        tile.dataset.index = index;
+        tile.style.backgroundPosition = `-${(index % 3) * 100}px -${Math.floor(index / 3) * 100}px`;
+
+        tile.ondragstart = (e) => {
+            e.dataTransfer.setData("text/plain", e.target.dataset.index);
+        };
+
+        tile.ondragover = (e) => e.preventDefault();
+
+        tile.ondrop = (e) => {
+            const draggedIndex = e.dataTransfer.getData("text/plain");
+            const droppedIndex = e.target.dataset.index;
+
+            if (draggedIndex === droppedIndex) return;
+
+            const allTiles = Array.from(board.children);
+            const draggedTile = allTiles.find(t => t.dataset.index === draggedIndex);
+            const droppedTile = e.target;
+
+            const tempBG = draggedTile.style.backgroundPosition;
+            draggedTile.style.backgroundPosition = droppedTile.style.backgroundPosition;
+            droppedTile.style.backgroundPosition = tempBG;
+
+            const tempData = draggedTile.dataset.index;
+            draggedTile.dataset.index = droppedTile.dataset.index;
+            droppedTile.dataset.index = tempData;
+
+            checkSwapPuzzleSolved();
+        };
+
+        board.appendChild(tile);
     });
-  }
-});
-</script><script>
-document.addEventListener("DOMContentLoaded", () => {
-  const nextBtn = document.getElementById("nextAfterPuzzle");
-  const cutieText = document.getElementById("cutieLabel");
-  if (nextBtn && cutieText) {
-    const showAfterSolve = () => {
-      setTimeout(() => {
-        nextBtn.style.display = "block";
-        cutieText.style.display = "block";
-      }, 2000);
-    };
+}
 
-    // Attach to existing checkPuzzleComplete logic if needed
-    const observer = new MutationObserver(() => {
-      if (document.querySelectorAll('.dropped').length === 9) {
-        showAfterSolve();
-        observer.disconnect();
-      }
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+
+function checkSwapPuzzleSolved() {
+    const tiles = document.querySelectorAll("#swapPuzzleBoard .swap-tile");
+    let isSolved = true;
+    tiles.forEach((tile, i) => {
+        if (parseInt(tile.dataset.index) !== i) isSolved = false;
     });
-    const puzzleDropTarget = document.getElementById("puz");
-    if (puzzleDropTarget) {
-      observer.observe(puzzleDropTarget, { childList: true, subtree: true });
+
+    if (isSolved) {
+        document.getElementById("completePuzzleMsg").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("puzzleContainer").style.display = "none";
+            document.getElementById("Content").style.display = "block";
+            mulainama();
+        }, 2000);
     }
-  }
-});
-</script>
-<script>
-let firstTile = null;
-function swapTiles(tile1, tile2) {
-  let temp = tile1.style.backgroundPosition;
-  tile1.style.backgroundPosition = tile2.style.backgroundPosition;
-  tile2.style.backgroundPosition = temp;
-
-  let order1 = tile1.getAttribute('data-order');
-  let order2 = tile2.getAttribute('data-order');
-  tile1.setAttribute('data-order', order2);
-  tile2.setAttribute('data-order', order1);
-}
-
-function checkPuzzleSolved() {
-  const tiles = document.querySelectorAll('#puz i');
-  const order = ['first', 'secon', 'third', 'fourt', 'fifth', 'sixth', 'seven', 'eight', 'ninth'];
-  for (let i = 0; i < tiles.length; i++) {
-    if (tiles[i].getAttribute('data-order') !== order[i]) return false;
-  }
-  return true;
-}
-
-function handleTileClick(tile) {
-  if (!firstTile) {
-    firstTile = tile;
-    tile.style.outline = '2px solid #ffaad4';
-  } else {
-    firstTile.style.outline = 'none';
-    if (firstTile !== tile) {
-      swapTiles(firstTile, tile);
-    }
-    firstTile = null;
-    if (checkPuzzleSolved()) {
-      setTimeout(() => {
-        document.getElementById("cutieLabel").style.display = "block";
-        document.getElementById("nextAfterPuzzle").style.display = "block";
-        logAnswer("Puzzle", "Completed");
-      }, 1000);
-    }
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const tiles = document.querySelectorAll("#puz i");
-  let order = ['first', 'secon', 'third', 'fourt', 'fifth', 'sixth', 'seven', 'eight', 'ninth'];
-  let shuffled = [...order].sort(() => Math.random() - 0.5);
-  tiles.forEach((tile, index) => {
-    tile.setAttribute("data-order", shuffled[index]);
-    tile.style.backgroundImage = "url('https://730.no/wp-content/uploads/2021/03/kylie-jenner-make-up-artist-Samuel-Rauda-kuwtk-season-20-keeping-up-with-the-kardashians-732x749.jpg')";
-    tile.style.backgroundPosition = getBackgroundPosition(shuffled[index]);
-    tile.addEventListener("click", () => handleTileClick(tile));
-  });
-});
-
-function getBackgroundPosition(className) {
-  const map = {
-    first: "0px 0px",
-    secon: "-100px 0px",
-    third: "-200px 0px",
-    fourt: "0px -100px",
-    fifth: "-100px -100px",
-    sixth: "-200px -100px",
-    seven: "0px -200px",
-    eight: "-100px -200px",
-    ninth: "-200px -200px"
-  };
-  return map[className] || "0px 0px";
 }
 </script>
+
 </body>
+
+
 </html>
