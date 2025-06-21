@@ -1,25 +1,191 @@
 <!DOCTYPE html>
+
 <html>
-
 <head>
-    <meta charset='UTF-8' />
-    <meta content='width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5'
-        name='viewport' />
-    <meta content='IE=edge' http-equiv='X-UA-Compatible' />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5" name="viewport"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Antique:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js">
+// === Gallery Logic ===
+function createStars() {
+    const starsContainer = document.querySelector('#galleryContainer .stars');
+    for (let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = Math.random() * 3 + 'px';
+        star.style.height = star.style.width;
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        starsContainer.appendChild(star);
+    }
+}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Shippori+Antique:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
-    <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
-    <script src="https://kit.fontawesome.com/4f3ce16e3e.js" crossorigin="anonymous"></script>
-    <title>OMPKY</title>
-    <link rel="icon" type="image/x-icon" href="https://www.palingit.com/favicon.ico">
-    <meta name="description" content="HTML Replit Coding">
-</head>
+function createGallery() {
+    const gallery = document.querySelector('#galleryContainer .gallery');
+    const totalCards = 10;
+    const radius = window.innerWidth < 768 ? 400 : 600;
+    let currentAngle = 0;
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
 
+    const imageUrls = [
+        './assets/pic1.jpg',
+        './assets/pic2.jpg',
+        './assets/pic3.jpg',
+        './assets/pic4.jpg',
+        './assets/pic5.jpg',
+        './assets/pic6.jpg',
+        './assets/pic7.jpg',
+        './assets/pic8.jpg',
+        './assets/pic9.jpg',
+        './assets/pic10.jpg'
+    ];
+
+    for (let i = 0; i < totalCards; i++) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <img src="${imageUrls[i]}" alt="Romantic photo ${i + 1}">
+            <div class="number">${i + 1}</div>
+        `;
+        gallery.appendChild(card);
+    }
+
+    function updateCards() {
+        const cards = gallery.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            const angle = (currentAngle + (index * (360 / totalCards))) * (Math.PI / 180);
+            const x = Math.sin(angle) * radius;
+            const z = Math.cos(angle) * radius;
+
+            card.style.transform = `translate3d(${x}px, 0, ${z}px) rotateY(${angle * (180 / Math.PI)}deg)`;
+
+            const normalizedAngle = ((currentAngle + (index * (360 / totalCards))) % 360 + 360) % 360;
+            if (normalizedAngle > 350 || normalizedAngle < 10) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+
+            const opacity = Math.max(0.2, 1 - Math.abs(normalizedAngle - 180) / 180);
+            card.style.opacity = opacity;
+        });
+    }
+
+    gallery.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        currentX = currentAngle;
+        gallery.style.cursor = 'grabbing';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const diff = (e.clientX - startX) * 0.5;
+        currentAngle = currentX + diff;
+        updateCards();
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+        gallery.style.cursor = 'grab';
+    });
+
+    // Touch events
+    gallery.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        currentX = currentAngle;
+        e.preventDefault();
+    });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const diff = (e.touches[0].clientX - startX) * 0.5;
+        currentAngle = currentX + diff;
+        updateCards();
+        e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    updateCards();
+}
+
+document.getElementById("By").onclick = function () {
+    if (fungsi == 2) {
+        // Show gallery instead of langsung funny questions
+        document.getElementById("Content").style.display = "none";
+        document.getElementById("galleryContainer").style.display = "block";
+        createStars();
+        createGallery();
+    }
+}
+
+document.getElementById("nextAfterGallery").addEventListener("click", () => {
+    document.getElementById("galleryContainer").style.display = "none";
+    document.getElementById("Content").style.display = "block";
+    menuju(); // Continue to funny questions
+});
+
+</script>
+<script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
+<script crossorigin="anonymous" src="https://kit.fontawesome.com/4f3ce16e3e.js"></script>
+<title>OMPKY</title>
+<link href="https://www.palingit.com/favicon.ico" rel="icon" type="image/x-icon"/>
+<meta content="HTML Replit Coding" name="description"/>
 <style>
+#puzzleContainer {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #000;
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Shippori Antique', sans-serif;
+    color: white;
+}
+
+#tapPuzzleBoard {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 4px;
+    margin-top: 20px;
+}
+
+.tap-tile {
+    width: 100px;
+    height: 100px;
+    background-image: url('puzzle-image.jpg');
+    background-size: 300px 300px;
+    border: 1px solid white;
+    box-sizing: border-box;
+    transition: transform 0.2s;
+}
+
+.tap-tile.selected {
+    outline: 3px solid #0f0;
+    transform: scale(1.05);
+}
+
+#completePuzzleMsg {
+    margin-top: 20px;
+    color: #0f0;
+    font-size: 20px;
+}
+</style><style>
 
 /* === Gallery Styles Injected === */
 #galleryContainer .gallery-container {
@@ -668,99 +834,71 @@
     }
 
 
-</style>
+</style></head>
 
 <body>
-
-    <!-- Ganti Audio di sini -->
-    <audio id="linkmp3" src="./assets/kuch to hone laga.mp3" loop></audio>
-
-
-    <div id="bodyblur">
-        <!-- Wallpaper --><img src="./assets/wp.jpg" id="wallpaper" />
-        <div id="beneranblur"></div>
-    </div>
-
-    <div id='Content'>
-        <button id="audioToggle" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-size: 14px;">
+<!-- Ganti Audio di sini -->
+<audio id="linkmp3" loop="" src="./assets/kuch to hone laga.mp3"></audio>
+<div id="bodyblur">
+<!-- Wallpaper --><img id="wallpaper" src="./assets/wp.jpg"/>
+<div id="beneranblur"></div>
+</div>
+<div id="Content">
+<button id="audioToggle" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-size: 14px;">
   🔊 Mute
 </button>
-
-
-        <div id="kadoIn">
-            <!-- Tombol Surat --><img src="./assets/kadoin.png" />
-        </div>
-        <p id="ket">Click the Gift!</p>
-       
-
-
-        <div class="kumpulanstiker">
-            <!-- Stiker untuk Konten -->
-            <img src="./assets/bunga.gif" id="fotostiker" />
-            <img src="./assets/pusn.gif" id="fotostiker1" />
-            <img src="./assets/pandacoklat.gif" id="fotostiker2" />
-            <img src="./assets/cilukba.gif" id="fotostiker3" />
-            <img src="./assets/pandakuning.gif" id="fotostiker4" />
-            <img src="./assets/emawh.gif" id="fotostiker5" />
-
-            <img src="./assets/pandacoklat.gif" id="fotostiker6" />
-        </div>
-
-        <p id="halo" class="halo"></p>
-
-        <div>
-            <blockquote id='bq' data-text='&#10084;'>
-                <p id="kalimat">I have something for you, turn up the volume, dear &#10084;</p>
-
-                <p id="pesan1">Tap here for your birthday surprise! 🎉&#10084;</p>
-                <div id="kolombaru">
-                        <li id="lv1">🎂</li>
-                        <li id="lv2">🎁</li>
-                        <li id="lv3">🥳</li>
-                        <li id="lv4">🤍</li>
-                </div>
-
-                <p id="pesan2">Wait...</p>
-                <!-- Pesan -->
-                <p id="pesan3">Hey.. it's your birthday! &#10084;</p>
-                <p id="pesan4">Happy Birthday Gussail Hema</p>
-                <p id="pesan5" class="gaya2">Getting older, getting cuter hehe</p>
-                <p id="pesan6" class="gaya2">Wishing you a long life, stay healthy dear wkwk &#10084;</p>
-                <p id="pesan7" class="gaya2">Hope your fortune keeps flowing, until you don't know how to spend it!</p>
-
-                <p id="pesan8" class="gaya2">Souuuuuuuu.....</p>
-                <p id="pesan9" class="gaya2">Hope you’re happy on your special day, you must be happy! I worked hard to
-                    make this, I even learned how to do it! &#10084;</p>
-                <p id="pesan10" class="gaya2">Thank you for being my biggest support, caring about me, and always being
-                    there for me. Love you, dear. &#10084;</p>
-
-                <!-- Tombol Lanjut -->
-                <p id="opsL">Click to Continue</p>
-            </blockquote>
-        </div>
-
-        <!-- Tombol Kirim Pesan -->
-        <div id="Tombol"><a id="By">&#128140; Continue</a></div>
-
-        <!-- Pesan Tambahan -->
-        <p id="katatambahan" class="sembunyi">Just Kidding Heheheh 😂</p>
-
-        <!-- Pesan Ditolak -->
-        <div id="pesanditolak">
-            <img id="stikerditolak" src="./assets/weee.gif" />
-            <p id="kataditolak">Just Kidding Heheheh 😂</p>
-        </div>
-
-
-
-        
-
-    </div>
-
-
-    
-
-    <script>
+<div id="kadoIn">
+<!-- Tombol Surat --><img src="./assets/kadoin.png"/>
+</div>
+<p id="ket">Click the Gift!</p>
+<div class="kumpulanstiker">
+<!-- Stiker untuk Konten -->
+<img id="fotostiker" src="./assets/bunga.gif"/>
+<img id="fotostiker1" src="./assets/pusn.gif"/>
+<img id="fotostiker2" src="./assets/pandacoklat.gif"/>
+<img id="fotostiker3" src="./assets/cilukba.gif"/>
+<img id="fotostiker4" src="./assets/pandakuning.gif"/>
+<img id="fotostiker5" src="./assets/emawh.gif"/>
+<img id="fotostiker6" src="./assets/pandacoklat.gif"/>
+</div>
+<p class="halo" id="halo"></p>
+<div>
+<blockquote data-text="❤" id="bq">
+<p id="kalimat">I have something for you, turn up the volume, dear ❤</p>
+<p id="pesan1">Tap here for your birthday surprise! 🎉❤</p>
+<div id="kolombaru">
+<li id="lv1">🎂</li>
+<li id="lv2">🎁</li>
+<li id="lv3">🥳</li>
+<li id="lv4">🤍</li>
+</div>
+<p id="pesan2">Wait...</p>
+<!-- Pesan -->
+<p id="pesan3">Hey.. it's your birthday! ❤</p>
+<p id="pesan4">Happy Birthday Gussail Hema</p>
+<p class="gaya2" id="pesan5">Getting older, getting cuter hehe</p>
+<p class="gaya2" id="pesan6">Wishing you a long life, stay healthy dear wkwk ❤</p>
+<p class="gaya2" id="pesan7">Hope your fortune keeps flowing, until you don't know how to spend it!</p>
+<p class="gaya2" id="pesan8">Souuuuuuuu.....</p>
+<p class="gaya2" id="pesan9">Hope you’re happy on your special day, you must be happy! I worked hard to
+                    make this, I even learned how to do it! ❤</p>
+<p class="gaya2" id="pesan10">Thank you for being my biggest support, caring about me, and always being
+                    there for me. Love you, dear. ❤</p>
+<!-- Tombol Lanjut -->
+<p id="opsL">Click to Continue</p>
+</blockquote>
+</div>
+<!-- Tombol Kirim Pesan -->
+<div id="Tombol"><a id="By">💌 Continue</a></div>
+<!-- Pesan Tambahan -->
+<p class="sembunyi" id="katatambahan">Just Kidding Heheheh 😂</p>
+<!-- Pesan Ditolak -->
+<div id="pesanditolak">
+<img id="stikerditolak" src="./assets/weee.gif"/>
+<p id="kataditolak">Just Kidding Heheheh 😂</p>
+</div>
+</div>
+<script>
 function logAnswer(question, answer) {
 function logGiftResponse(answer) {
     logAnswer("Do you want a gift?", answer);
@@ -830,50 +968,87 @@ audioToggle.addEventListener("click", () => {
 }
 
         async function pilihwarna() {
-    var { isConfirmed: warna } = await swals.fire({
-        title: 'Oh, Chashmiss which color do you want to choose ? come on, don\'t hesitate 👀',
-        showCancelButton: true,
-        confirmButtonText: 'Blue 💙',
-        cancelButtonText: 'Red ❤️',
-    });
+            var { isConfirmed: warna } = await swals.fire({
+                title: 'Oh, ' + nama + ', which color do you want to choose?',
+                text: 'Come on, don\'t hesitate :v',
+                showCancelButton: true,
+                confirmButtonText: 'Blue',
+                cancelButtonText: 'Red',
+            });
+            if (warna) {
+                logAnswer("Color selected", "Blue");
+                await swals.fire('Yeayy!', 'If you choose <b>Blue</b>, you have to treat me! &#129315;');
+                var { isConfirmed: warna2 } = await swals.fire({
+                    title: nama + ', are you sure you want Blue?',
+                    text: 'Or do you want to change the color?', showCancelButton: true,
+                    confirmButtonText: 'Sure',
+                    cancelButtonText: 'Change',
+                });
+                if (warna2) {
+                    logAnswer("Color confirmed", "Blue");
+                    await swals.fire('Okay!', `Now look at this &#10084;&#65039;`);
+                    showPuzzle();
+                } else {
+                    logAnswer("Color changed", "Red");
+                    await swals.fire('Okay, choosing Red!', 'It\'s actually the same, but if you choose Red, you have to treat me more! &#129315;');
+                    showPuzzle();
+                }
+            } else {
+                    logAnswer("Color selected", "Red");
+                await swals.fire('Yeayy!', 'If you choose <b>Red</b>, you have to treat me! &#129315;');
+                var { isConfirmed: warna2 } = await swals.fire({
+                    title: nama + ', are you sure you want Red?',
+                    text: 'Or do you want to change the color?', showCancelButton: true,
+                    confirmButtonText: 'Change',
+                    cancelButtonText: 'Sure',
+                });
+                if (warna2) {
+                    logAnswer("Color confirmed", "Blue");
+                    await swals.fire('Okay, choosing Blue!', 'It\'s actually the same, but if you choose Blue, you have to treat me more! &#129315;');
+                    showPuzzle();
+                } else {
+                    logAnswer("Color confirmed", "Red");
+                    await swals.fire('Okay!', `Now look at this ❤️`);
+                    showPuzzle();
+                }
+            }
+        }
 
-    if (warna) {
-        logAnswer("Color selected", "Blue");
-        await swals.fire("yeahh!! you choose blue you have to treat me!😂");
-        var { isConfirmed: warna2 } = await swals.fire({
-            title: "Chashmiss are you sure you want blue color.... or do you want to change the color?👀",
-            showCancelButton: true,
-            confirmButtonText: "Blue 💙",
-            cancelButtonText: "Red ❤️"
-        });
-        if (warna2) {
-            logAnswer("Color confirmed", "Blue");
-            await swals.fire("Okay, choosing Blue!", "It's actually the same, but if you choose Blue, you have to treat me more! 😂");
-            showPuzzle();
-        } else {
-            logAnswer("Color changed", "Red");
-            await swals.fire("Okay, choosing Red!", "It's actually the same, but if you choose Red, you have to treat me more! 😂");
-            showPuzzle();
-        }
-    } else {
-        logAnswer("Color selected", "Red");
-        await swals.fire("yeahh!! you choose red you have to treat me!😂");
-        var { isConfirmed: warna2 } = await swals.fire({
-            title: "Chashmiss are you sure you want red color.... or do you want to change the color?👀",
-            showCancelButton: true,
-            confirmButtonText: "Red ❤️",
-            cancelButtonText: "Blue 💙"
-        });
-        if (warna2) {
-            logAnswer("Color confirmed", "Red");
-            await swals.fire("Okay, choosing Red!", "It's actually the same, but if you choose Red, you have to treat me more! 😂");
-            showPuzzle();
-        } else {
-            logAnswer("Color changed", "Blue");
-            await swals.fire("Okay, choosing Blue!", "It's actually the same, but if you choose Blue, you have to treat me more! 😂");
-            showPuzzle();
-        }
-    }
+
+
+        
+
+        //Variable Pertanyaan Akhir
+        var tanya = 'Do you want a gift? ';
+        var opstanya = 'Please answer';
+        var tompositif = 'Yes';
+        var tomnegatif = 'Yes Yes Yes &#10084;';
+
+        
+async function pertanyaanLucu() {
+    const res1 = await swals.fire({
+        title: 'Do you snore while dreaming about cake? 😴🍰',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No, I eat it in dreams 🍰'
+    });
+    logAnswer("Do you snore while dreaming about cake?", res1.isConfirmed ? "Yes" : "No, I eat it in dreams 🍰");
+
+    const res2 = await swals.fire({
+        title: 'Would you fight someone for the last slice of pizza? 🍕',
+        showCancelButton: true,
+        confirmButtonText: 'Of course!',
+        cancelButtonText: 'Nah, I’ll bake one'
+    });
+    logAnswer("Would you fight someone for the last slice of pizza?", res2.isConfirmed ? "Of course!" : "Nah, I’ll bake one");
+
+    const res3 = await swals.fire({
+        title: 'Is your birthday an excuse to eat 3x more? 😋',
+        showCancelButton: true,
+        confirmButtonText: 'Absolutely!',
+        cancelButtonText: 'No comment...'
+    });
+    logAnswer("Is your birthday an excuse to eat 3x more?", res3.isConfirmed ? "Absolutely!" : "No comment...");
 }
 
 
@@ -915,12 +1090,7 @@ async function menuju() { pesanwhatsapp = "Thank you for wishing " + nama + " a 
         function tombol() { wallpaper.style = "transform: scale(1);"; Tombol.style = "opacity:1;transform: scale(1);"; if (fungsi == 2) { By.innerHTML = "&#128140; Send" } }
         document.getElementById("By").onclick = function () { if (fungsi == 1) { Tombol.style = ""; fthilang(); fungsi = 0; pertanyaan(); } if (fungsi == 2) { Tombol.style = ""; menuju(); } }
 
-        const waktuSekarang = new Date().getHours(); let ucapan;
-        if (waktuSekarang < 10) { ucapan = "Good Morning, "; }
-        else if (waktuSekarang < 16) { ucapan = "Good Afternoon, "; }
-        else if (waktuSekarang < 19) { ucapan = "Good Evening, "; }
-        else {
-                    logAnswer("Anonymous answered", "Enter name: wrong (input: " + nama + ")"); ucapan = "Good Night, "; }
+        
 
         vketik1 = kalimat.innerHTML; kalimat.innerHTML = "";
         function mulaiketik1() {
@@ -1054,32 +1224,107 @@ async function menuju() { pesanwhatsapp = "Thank you for wishing " + nama + " a 
         }
 
     </script>
-    <!-- Sampai Sini -->
-
-
-<!-- Gallery Section with Welcome Message -->
+<!-- Sampai Sini -->
+<!-- Gallery Section -->
 <div id="galleryContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 9999; color: white; font-family: 'Dancing Script', cursive;">
-  <div id="welcomeMessage" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 2.2em; text-align: center;">
+<div id="welcomeMessage" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 2.2em; text-align: center;">
     Welcome to Our Gallery ❤️
   </div>
-
-  <div class="ambient-light"></div>
-  <div class="spotlight"></div>
-  <div class="stars"></div>
-  <button class="nav-button prev" aria-label="Previous"></button>
-  <button class="nav-button next" aria-label="Next"></button>
-
-  <div class="gallery-container" style="display: none;">
-      <div class="gallery"></div>
-  </div>
-
-  <button id="nextAfterGallery" style="display: none; position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+<div class="ambient-light"></div>
+<div class="spotlight"></div>
+<div class="stars"></div>
+<button aria-label="Previous" class="nav-button prev"></button>
+<button aria-label="Next" class="nav-button next"></button>
+<div class="gallery-container" style="display: none;">
+<div class="gallery"></div>
+</div>
+<button id="nextAfterGallery" style="display: none; position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
     padding: 15px 30px; font-size: 18px; border: none; background: #fc5c7d; color: white;
     border-radius: 30px; cursor: pointer; z-index: 10001; box-shadow: 0 0 20px rgba(0,0,0,0.3);">Next ➡️</button>
 </div>
+<div id="puzzleContainer">
+<div>🧩 Tap two tiles to swap them!</div>
+<div id="tapPuzzleBoard"></div>
+<div id="completePuzzleMsg" style="display:none;">🎉 Puzzle Complete! 🎉</div>
+</div><script>
+let firstTile = null;
 
+function showPuzzle() {
+    document.getElementById("Content").style.display = "none";
+    document.getElementById("puzzleContainer").style.display = "flex";
+    setupTapSwapPuzzle();
+}
 
-<script>
+function setupTapSwapPuzzle() {
+    const board = document.getElementById("tapPuzzleBoard");
+    board.innerHTML = "";
+    firstTile = null;
+
+    const indices = [...Array(9).keys()];
+    shuffleArray(indices);
+
+    indices.forEach((index, position) => {
+        const tile = document.createElement("div");
+        tile.className = "tap-tile";
+        tile.dataset.index = index;
+        tile.dataset.position = position;
+        tile.style.backgroundPosition = `-${(index % 3) * 100}px -${Math.floor(index / 3) * 100}px`;
+
+        tile.addEventListener("click", () => handleTileTap(tile));
+        board.appendChild(tile);
+    });
+}
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+
+function handleTileTap(tile) {
+    if (!firstTile) {
+        firstTile = tile;
+        tile.classList.add("selected");
+    } else if (tile === firstTile) {
+        tile.classList.remove("selected");
+        firstTile = null;
+    } else {
+        // Swap styles and indices
+        const tempIndex = tile.dataset.index;
+        const tempBG = tile.style.backgroundPosition;
+
+        tile.dataset.index = firstTile.dataset.index;
+        tile.style.backgroundPosition = firstTile.style.backgroundPosition;
+
+        firstTile.dataset.index = tempIndex;
+        firstTile.style.backgroundPosition = tempBG;
+
+        tile.classList.remove("selected");
+        firstTile.classList.remove("selected");
+        firstTile = null;
+
+        checkTapPuzzleSolved();
+    }
+}
+
+function checkTapPuzzleSolved() {
+    const tiles = document.querySelectorAll("#tapPuzzleBoard .tap-tile");
+    let isSolved = true;
+    tiles.forEach((tile, i) => {
+        if (parseInt(tile.dataset.index) !== i) isSolved = false;
+    });
+
+    if (isSolved) {
+        document.getElementById("completePuzzleMsg").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("puzzleContainer").style.display = "none";
+            document.getElementById("Content").style.display = "block";
+            mulainama();
+        }, 2000);
+    }
+}
+</script><script>
 // === Gallery Logic (fixed placement) ===
 function createStars() {
     const starsContainer = document.querySelector('#galleryContainer .stars');
@@ -1214,141 +1459,140 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
     document.getElementById("Content").style.display = "block";
     menuju();
 });
-</script>
-
-<!-- Tap-to-Swap Puzzle Game (Mobile Friendly) -->
-<style>
-#puzzleContainer {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: #000;
-    z-index: 10000;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-family: 'Shippori Antique', sans-serif;
-    color: white;
-}
-
-#tapPuzzleBoard {
-    display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
-    gap: 4px;
-    margin-top: 20px;
-}
-
-.tap-tile {
-    width: 100px;
-    height: 100px;
-    background-image: url('puzzle-image.jpg');
-    background-size: 300px 300px;
-    border: 1px solid white;
-    box-sizing: border-box;
-    transition: transform 0.2s;
-}
-
-.tap-tile.selected {
-    outline: 3px solid #0f0;
-    transform: scale(1.05);
-}
-
-#completePuzzleMsg {
-    margin-top: 20px;
-    color: #0f0;
-    font-size: 20px;
-}
-</style>
-
-<div id="puzzleContainer">
-    <div>🧩 Tap two tiles to swap them!</div>
-    <div id="tapPuzzleBoard"></div>
-    <div id="completePuzzleMsg" style="display:none;">🎉 Puzzle Complete! 🎉</div>
-</div>
-
-<script>
-let firstTile = null;
-
-function showPuzzle() {
-    document.getElementById("Content").style.display = "none";
-    document.getElementById("puzzleContainer").style.display = "flex";
-    setupTapSwapPuzzle();
-}
-
-function setupTapSwapPuzzle() {
-    const board = document.getElementById("tapPuzzleBoard");
-    board.innerHTML = "";
-    firstTile = null;
-
-    const indices = [...Array(9).keys()];
-    shuffleArray(indices);
-
-    indices.forEach((index, position) => {
-        const tile = document.createElement("div");
-        tile.className = "tap-tile";
-        tile.dataset.index = index;
-        tile.dataset.position = position;
-        tile.style.backgroundPosition = `-${(index % 3) * 100}px -${Math.floor(index / 3) * 100}px`;
-
-        tile.addEventListener("click", () => handleTileTap(tile));
-        board.appendChild(tile);
-    });
-}
-
-function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+</script><script>
+// === Gallery Logic (fixed placement) ===
+function createStars() {
+    const starsContainer = document.querySelector('#galleryContainer .stars');
+    for (let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = Math.random() * 3 + 'px';
+        star.style.height = star.style.width;
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        starsContainer.appendChild(star);
     }
 }
 
-function handleTileTap(tile) {
-    if (!firstTile) {
-        firstTile = tile;
-        tile.classList.add("selected");
-    } else if (tile === firstTile) {
-        tile.classList.remove("selected");
-        firstTile = null;
-    } else {
-        // Swap styles and indices
-        const tempIndex = tile.dataset.index;
-        const tempBG = tile.style.backgroundPosition;
+function createGallery() {
+    const gallery = document.querySelector('#galleryContainer .gallery');
+    const totalCards = 10;
+    const radius = window.innerWidth < 768 ? 400 : 600;
+    let currentAngle = 0;
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
 
-        tile.dataset.index = firstTile.dataset.index;
-        tile.style.backgroundPosition = firstTile.style.backgroundPosition;
+    const imageUrls = [
+        './assets/pic1.jpg',
+        './assets/pic2.jpg',
+        './assets/pic3.jpg',
+        './assets/pic4.jpg',
+        './assets/pic5.jpg',
+        './assets/pic6.jpg',
+        './assets/pic7.jpg',
+        './assets/pic8.jpg',
+        './assets/pic9.jpg',
+        './assets/pic10.jpg'
+    ];
 
-        firstTile.dataset.index = tempIndex;
-        firstTile.style.backgroundPosition = tempBG;
-
-        tile.classList.remove("selected");
-        firstTile.classList.remove("selected");
-        firstTile = null;
-
-        checkTapPuzzleSolved();
+    for (let i = 0; i < totalCards; i++) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <img src="${imageUrls[i]}" alt="Romantic photo ${i + 1}">
+        `;
+        gallery.appendChild(card);
     }
-}
 
-function checkTapPuzzleSolved() {
-    const tiles = document.querySelectorAll("#tapPuzzleBoard .tap-tile");
-    let isSolved = true;
-    tiles.forEach((tile, i) => {
-        if (parseInt(tile.dataset.index) !== i) isSolved = false;
+    function updateCards() {
+        const cards = gallery.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            const angle = (currentAngle + (index * (360 / totalCards))) * (Math.PI / 180);
+            const x = Math.sin(angle) * radius;
+            const z = Math.cos(angle) * radius;
+
+            card.style.transform = `translate3d(${x}px, 0, ${z}px) rotateY(${angle * (180 / Math.PI)}deg)`;
+
+            const normalizedAngle = ((currentAngle + (index * (360 / totalCards))) % 360 + 360) % 360;
+            if (normalizedAngle > 350 || normalizedAngle < 10) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+
+            const opacity = Math.max(0.2, 1 - Math.abs(normalizedAngle - 180) / 180);
+            card.style.opacity = opacity;
+        });
+    }
+
+    gallery.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        currentX = currentAngle;
+        gallery.style.cursor = 'grabbing';
     });
 
-    if (isSolved) {
-        document.getElementById("completePuzzleMsg").style.display = "block";
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const diff = (e.clientX - startX) * 0.5;
+        currentAngle = currentX + diff;
+        updateCards();
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+        gallery.style.cursor = 'grab';
+    });
+
+    gallery.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        currentX = currentAngle;
+        e.preventDefault();
+    });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const diff = (e.touches[0].clientX - startX) * 0.5;
+        currentAngle = currentX + diff;
+        updateCards();
+        e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    updateCards();
+}
+
+document.getElementById("By").onclick = function () {
+    if (fungsi == 2) {
+        document.getElementById("Content").style.display = "none";
+        const galleryContainer = document.getElementById("galleryContainer");
+        galleryContainer.style.display = "block";
+
         setTimeout(() => {
-            document.getElementById("puzzleContainer").style.display = "none";
-            document.getElementById("Content").style.display = "block";
-            mulainama();
+            document.getElementById("welcomeMessage").style.display = "none";
+            document.querySelector("#galleryContainer .gallery-container").style.display = "flex";
+            document.getElementById("nextAfterGallery").style.display = "block";
+            createStars();
+            createGallery();
         }, 2000);
+    } else if (fungsi == 1) {
+        Tombol.style = "";
+        fthilang();
+        fungsi = 0;
+        pertanyaan();
     }
-}
-</script>
+};
 
-</body>
-
-
+document.getElementById("nextAfterGallery").addEventListener("click", () => {
+    document.getElementById("galleryContainer").style.display = "none";
+    document.getElementById("Content").style.display = "block";
+    menuju();
+});
+</script></body>
 </html>
