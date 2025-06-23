@@ -161,7 +161,7 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
     display: grid;
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
-    gap: 0px;
+    gap: 2px;
     margin-top: 20px;
 }
 
@@ -170,7 +170,7 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
     height: 100px;
     background-image: url('puzzle-image.jpg');
     background-size: 300px 300px;
-    border: none;
+    border: 1px solid white;
     box-sizing: border-box;
     transition: transform 0.2s;
 }
@@ -889,7 +889,7 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
 <p id="pesan4">Happy Birthday Gussail Hema</p>
 <p class="gaya2" id="pesan5">Getting older, getting cuter hehe</p>
 <p class="gaya2" id="pesan6">Wishing you a long life, stay healthy dear wkwk ❤</p>
-<p class="gaya2" id="pesan7">Hope your fortune keeps flowing, until you don't know how to spend it!</p>
+<p class="gaya2" id="pesan7">I will always be grateful for the day I found you, and even more grateful that you have stayed. You mean so much to me, and I'm lucky to have you as my best friend!...</p>
 <p class="gaya2" id="pesan8">Souuuuuuuu.....</p>
 <p class="gaya2" id="pesan9">Hope you’re happy on your special day, you must be happy! I worked hard to
                     make this, I even learned how to do it! ❤</p>
@@ -967,13 +967,23 @@ audioToggle.addEventListener("click", () => {
        // vketikhalo = "Hi, " + nama + " &#10084;";
        vketikhalo = "Hi, " + "Meri Pyari Hema" + " &#10084;";
         await swals.fire('Hi, ' + "Hema" + ' ツ');
-        await swals.fire('It\'s your birthday today!');
-        await swals.fire('Happy birthday! 🎉');
+        await swals.fire({
+  title: '🎉 Happy Birthday Moti😜😜🎉',
+  html: '<div id="typeItBirthday"></div>',
+  didOpen: () => {
+    new TypeIt("#typeItBirthday", {
+      strings: ["It's your birthday today!🥳🥳 Cheers to you on your special day! You deserve all the best things in life. Let's make this birthday one to remember🤩😜"],
+      speed: 45,
+      waitUntilVisible: true,
+    }).go();
+  }
+});
+        await swals.fire('Happy birthday Chashmiss😜🥳🎉');
         await swals.fire('Wishing you a long and healthy life');
         pilihwarna();
     } else {
                     logAnswer("Anonymous answered", "Enter name: wrong (input: " + nama + ")");
-        await swals.fire('Oops!', 'That\'s not the right name. itna bhi nahi guess kar payi😑😒 Wo naam likho jo mai tumhe bolta hun!!');
+        await swals.fire('Oops! Hema', 'That\'s not the right name. itna bhi nahi guess kar payi😑😒 han han tumhe kyu hin yaad rahega😒🙂 Wo naam likho jo mai tumhe bolta hun!!');
         setTimeout(() => { inipesan(); }, 300); // Retry
     }
 }
