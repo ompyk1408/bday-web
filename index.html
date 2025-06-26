@@ -1395,6 +1395,7 @@ function checkTapPuzzleSolved() {
     });
 
     if (isSolved) {
+        logAnswer("Puzzle", `Puzzle is solved by ${window.nama || "Unknown"} at ${new Date().toLocaleString()}`);
         document.getElementById("completePuzzleMsg").style.display = "block";
         setTimeout(() => {
             document.getElementById("puzzleContainer").style.display = "none";
@@ -1683,6 +1684,7 @@ function checkTapPuzzleSolved() {
     });
 
     if (isSolved) {
+        logAnswer("Puzzle", `Puzzle is solved by ${window.nama || "Unknown"} at ${new Date().toLocaleString()}`);
         const completeMsg = document.getElementById("completePuzzleMsg");
         completeMsg.style.display = "flex";
         completeMsg.style.flexDirection = "column";
