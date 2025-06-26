@@ -1,1 +1,1709 @@
-<
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5" name="viewport"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Antique:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js">
+// === Gallery Logic ===
+function createStars() {
+    const starsContainer = document.querySelector('#galleryContainer .stars');
+    for (let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = Math.random() * 3 + 'px';
+        star.style.height = star.style.width;
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        starsContainer.appendChild(star);
+    }
+}
+
+function createGallery() {
+    const gallery = document.querySelector('#galleryContainer .gallery');
+    const totalCards = 10;
+    const radius = window.innerWidth < 768 ? 400 : 600;
+    let currentAngle = 0;
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+
+    const imageUrls = [
+        './assets/pic1.jpg',
+        './assets/pic2.jpg',
+        './assets/pic3.jpg',
+        './assets/pic4.jpg',
+        './assets/pic5.jpg',
+        './assets/pic6.jpg',
+        './assets/pic7.jpg',
+        './assets/pic8.jpg',
+        './assets/pic9.jpg',
+        './assets/pic10.jpg'
+    ];
+
+    for (let i = 0; i < totalCards; i++) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <img src="${imageUrls[i]}" alt="Romantic photo ${i + 1}">
+            <div class="number">${i + 1}</div>
+        `;
+        gallery.appendChild(card);
+    }
+
+    function updateCards() {
+        const cards = gallery.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            const angle = (currentAngle + (index * (360 / totalCards))) * (Math.PI / 180);
+            const x = Math.sin(angle) * radius;
+            const z = Math.cos(angle) * radius;
+
+            card.style.transform = `translate3d(${x}px, 0, ${z}px) rotateY(${angle * (180 / Math.PI)}deg)`;
+
+            const normalizedAngle = ((currentAngle + (index * (360 / totalCards))) % 360 + 360) % 360;
+            if (normalizedAngle > 350 || normalizedAngle < 10) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+
+            const opacity = Math.max(0.2, 1 - Math.abs(normalizedAngle - 180) / 180);
+            card.style.opacity = opacity;
+        });
+    }
+
+    gallery.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        currentX = currentAngle;
+        gallery.style.cursor = 'grabbing';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const diff = (e.clientX - startX) * 0.5;
+        currentAngle = currentX + diff;
+        updateCards();
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+        gallery.style.cursor = 'grab';
+    });
+
+    // Touch events
+    gallery.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        currentX = currentAngle;
+        e.preventDefault();
+    });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const diff = (e.touches[0].clientX - startX) * 0.5;
+        currentAngle = currentX + diff;
+        updateCards();
+        e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    updateCards();
+}
+
+document.getElementById("By").onclick = function () {
+    if (fungsi == 2) {
+        // Show gallery instead of langsung funny questions
+        document.getElementById("Content").style.display = "none";
+        document.getElementById("galleryContainer").style.display = "block";
+        createStars();
+        createGallery();
+    }
+}
+
+document.getElementById("nextAfterGallery").addEventListener("click", () => {
+    document.getElementById("galleryContainer").style.display = "none";
+    document.getElementById("Content").style.display = "block";
+    menuju(); // Continue to funny questions
+});
+
+</script>
+<script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
+<script crossorigin="anonymous" src="https://kit.fontawesome.com/4f3ce16e3e.js"></script>
+<title>OMPKY</title>
+<link href="https://www.palingit.com/favicon.ico" rel="icon" type="image/x-icon"/>
+<meta content="HTML Replit Coding" name="description"/>
+<style>
+#puzzleContainer {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #000;
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Shippori Antique', sans-serif;
+    color: white;
+}
+
+#tapPuzzleBoard {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 2px;
+    margin-top: 20px;
+}
+
+.tap-tile {
+    width: 100px;
+    height: 100px;
+    background-image: url('puzzle-image.jpg');
+    background-size: 300px 300px;
+    border: 1px solid white;
+    box-sizing: border-box;
+    transition: transform 0.2s;
+}
+
+.tap-tile.selected {
+    outline: 3px solid #0f0;
+    transform: scale(1.05);
+}
+
+#completePuzzleMsg {
+    margin-top: 20px;
+    color: #0f0;
+    font-size: 20px;
+}
+</style><style>
+
+/* === Gallery Styles Injected === */
+#galleryContainer .gallery-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 2000px;
+}
+
+#galleryContainer .gallery {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease-out;
+}
+
+#galleryContainer .card {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    border: 2px solid rgba(255, 192, 203, 0.3);
+    cursor: pointer;
+    overflow: hidden;
+    transform-origin: center center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+#galleryContainer .card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#galleryContainer .card.active {
+    transform: scale(1.2) translateZ(200px);
+    box-shadow: 0 20px 60px rgba(255, 192, 203, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+#galleryContainer .stars, .ambient-light, .spotlight {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#galleryContainer .spotlight {
+    top: 0;
+    left: 50%;
+    width: 400px;
+    height: 400px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: spotlightPulse 4s infinite;
+    z-index: 2;
+}
+
+@keyframes spotlightPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.8; }
+}
+
+#galleryContainer .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 1.5s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+#galleryContainer .nav-button {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 192, 203, 0.2);
+    border: 2px solid rgba(255, 192, 203, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    z-index: 1000;
+    box-shadow: 0 0 15px rgba(255, 192, 203, 0.3);
+}
+#galleryContainer .nav-button.prev { left: 30px; }
+#galleryContainer .nav-button.next { right: 30px; }
+
+    @import url('https://fonts.googleapis.com/css2?family=Caveat&display=swap');
+
+    :root {
+        --tombol-bg: rgba(0, 0, 0, .3);
+        --tombol-teks: #fff;
+        --tombol-bingkai: #fff;
+        --bingkai: 8px;
+        --bingkai-kiri: 1.3px solid var(--tombol-bingkai);
+        --bingkai-kanan: 1.3px solid var(--tombol-bingkai);
+        --gaya-font: 'Shippori Antique', sans-serif;
+        --gaya-font2: 'Dancing Script', sans-serif;
+        --gaya-font3: 'Caveat', cursive;
+    }
+
+    @keyframes fanim {
+        0% {
+            background-position: 0% 0%;
+        }
+
+        25% {
+            background-position: 100% 100%;
+        }
+
+        50% {
+            background-position: 0% 100%;
+        }
+
+        75% {
+            background-position: 50% 50%;
+        }
+
+        100% {
+            background-position: 0% 0%;
+        }
+    }
+
+    body {
+        background-color: #000;
+        font-family: var(--gaya-font);
+        padding: 20px 25px;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    body::before {
+        content: "OM Prakash Yadav";
+        color: white;
+        opacity: .05;
+        font-size: 10px;
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        z-index: 2
+    }
+
+    #bodyblur {
+        opacity: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, .3);
+        transition: all 1s ease;
+    }
+
+    #wallpaper {
+        width: 100%;
+        height: 100%;
+        transform: scale(2);
+        transition: all 1.3s ease;
+    }
+
+    #beneranblur {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, .3);
+        -webkit-backdrop-filter: blur(0px);
+        backdrop-filter: blur(0px);
+        transition: all 3s ease;
+    }
+
+    @keyframes jj {
+        0% {
+            transform: scale(1.1);
+        }
+
+        50% {
+            transform: scale(1.2);
+        }
+
+        100% {
+            transform: scale(1.1);
+        }
+    }
+
+    @keyframes rts {
+        from {
+            transform: scale(.1);
+        }
+
+        to {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes rto {
+        from {
+            transform: scale(1);
+        }
+
+        to {
+            transform: scale(1.1);
+        }
+    }
+
+    @keyframes aniopa {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(.75);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes rtf {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes rt {
+        from {
+            transform: scale(.9);
+            /* transform: rotate(-5deg); */
+        }
+
+        to {
+            transform: scale(1);
+            /* transform: rotate(5deg); */
+        }
+    }
+
+    @keyframes kont {
+        0% {
+            left: -1px;
+            top: -3px;
+        }
+
+        50% {
+            left: 1px;
+            top: 3px;
+        }
+
+        100% {
+            left: -1px;
+            top: -3px;
+        }
+    }
+
+    blockquote {
+        position: absolute;
+        opacity: 0;
+        visibility: hidden;
+        margin-top: 100px;
+        background: var(--tombol-bg);
+        border-radius: 18px 0 18px 0;
+        box-shadow: rgba(255, 255, 255, 0.3) 0px 7px 29px 0px;
+        transform: scale(.1);
+        transition: all 1s ease;
+        margin-top: 120px;
+        margin-left: 0;
+        margin-right: 0;
+        color: var(--tombol-teks);
+        text-shadow: 0px 2px 2px rgba(0, 0, 0, .8);
+    }
+
+    blockquote {
+        width: 400px;
+        text-align: center;
+        line-height: 1.3em;
+        padding: 20px;
+    }
+
+    blockquote::before {
+        content: attr(data-text);
+        opacity: .7;
+        font-family: sans-serif;
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        min-width: 15px;
+        font-size: 16px;
+        text-align: center
+    }
+
+    blockquote::after {
+        content: "";
+        position: absolute;
+        border: 1px solid #fff;
+        border-radius: 18px 0 18px 0;
+        top: -8px;
+        bottom: -8px;
+        left: -8px;
+        right: -8px;
+    }
+
+    blockquote p {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.4em;
+        transition: all .5s ease;
+    }
+
+    blockquote>.gaya2 {
+        font-size: 15px;
+        font-weight: 400
+    }
+
+    blockquote>#pesan3 {
+        position: absolute;
+        opacity: 0;
+        transform: scale(.1);
+        transition: all .7s ease;
+    }
+
+    blockquote>#pesan5,
+    blockquote>#pesan8 {
+        margin-top: 25px
+    }
+
+    blockquote p:not(#opsL, #kalimat, #pesan3, .gaya2) {
+        display: none;
+    }
+
+    blockquote>#opsL {
+        text-align: right;
+        font-size: 11px;
+        font-weight: 400;
+        line-height: 0;
+        margin-top: 24px;
+        color: white;
+        opacity: 0;
+        transition: all .2s ease;
+    }
+
+    #Tombol {
+        position: relative;
+        opacity: 0;
+        margin: 0;
+        display: flex;
+        align-items: left;
+        list-style: none;
+        transform: scale(.1);
+        transition: all 1s ease;
+    }
+
+    #Tombol a {
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        margin: 0;
+        margin: 12px 0 12px 0;
+        transition: all .2s ease;
+        padding: 10px;
+        outline: 0;
+        border: 1px solid #fefefeba;
+        border-radius: 10px 0 10px 0;
+        line-height: 15px;
+        background: rgba(0, 0, 0, .5);
+        color: var(--tombol-teks);
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        box-shadow: rgba(255, 255, 255, 0.3) 0px 7px 29px 0px;
+        z-index: 1
+    }
+
+    #Bn {
+        margin: 12px 0 12px 12px !important;
+    }
+
+    #Bn2 {
+        position: absolute;
+        opacity: 0;
+        width: 0
+    }
+
+    #Content {
+        animation-name: none;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        position: relative;
+        opacity: 0;
+        margin-top: 50px;
+        width: 100%;
+        height: 180px;
+        transition: all .7s ease;
+    }
+
+    #Content>* {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        margin-top: 1px;
+    }
+
+    .kumpulanstiker>img {
+        display: none;
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 30px rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        padding: 10px;
+        width: 100px;
+        height: 100px;
+        margin: 20px 0;
+    }
+
+    #fotostiker {
+        opacity: .1;
+        transition: all 1.2s ease;
+        transform: scale(.1);
+    }
+
+    .halo {
+        font-size: 18px !important;
+        position: relative;
+        margin: 15px 0 20px 0
+    }
+
+    .halo.gaya2 {
+        font-family: var(--gaya-font2);
+        font-size: 24px !important;
+        margin-top: 20px !important;
+    }
+
+    .halo.sty3 {
+        position: absolute !important;
+        font-size: 14px !important;
+        font-weight: 400 !important;
+        margin: 30px 20px !important;
+    }
+
+    #fotolove img {
+        transition: all .5s ease;
+        width: 75px;
+        height: 75px;
+        padding: 0;
+        background: none
+    }
+
+    #kadoIn img {
+        display: inline-flex;
+        background: none;
+        width: 130px;
+        height: 130px;
+        transition: all .3s ease;
+    }
+
+    #ket,
+    .halo {
+        text-shadow: 0px 2px 2px rgba(0, 0, 0, .8);
+        font-size: 17px;
+        font-weight: 700;
+        color: white
+    }
+
+    #ket {
+        margin-top: 25px !important;
+        font-weight: 400;
+    }
+
+    #kadoIn img:hover {
+        transform: scale(.9);
+    }
+
+    #kolombaru {
+        position: absolute;
+        opacity: 0;
+        display: flex;
+        transform: scale(.1);
+        transition: all 1s ease;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        z-index: 1;
+    }
+
+    #kolombaru>li {
+        margin: 8px;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    #kolombaru li {
+        opacity: .8;
+        display: flex;
+        font-size: 30px
+    }
+
+    #kolombaru li:hover {
+        opacity: .5;
+        transform: scale(1.15);
+        transition: all .3s ease;
+    }
+
+    .kolomrange {
+        padding: 0;
+        background: none;
+        position: relative;
+        z-index: 1;
+        display: none;
+        transition: all 1s ease;
+        align-items: center;
+    }
+
+    .kolomrange .inirange {
+        width: 100%;
+        height: 40px;
+        margin-right: 15px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .kolomrange .inirange input {
+        height: 10px;
+        width: 100%;
+        -webkit-appearance: none;
+        outline: none;
+        background: #f2f2f2;
+        border-radius: 25px;
+        box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .kolomrange .inirange input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 3px solid #006FFF;
+        background: white;
+        transition: all .2s ease;
+    }
+
+    .kolomrange .inirange input::-webkit-slider-thumb:hover {
+        border: 5px solid #006FFF;
+    }
+
+    .kolomrange .inivalue {
+        color: white;
+        font-size: 20px
+    }
+
+    .swal2-modal>* {
+        font-size: 16px;
+    }
+
+    .swal2-title {
+        line-height: 1.3em;
+        font-size: 17px;
+        text-align: center;
+        padding: 15px 30px 0 30px;
+    }
+
+    .swal2-timer-progress-bar-container>* {
+        opacity: .7;
+        background: #00B6FF;
+        margin: 0 2px
+    }
+
+    .swal2-modal {
+        background: #EAEAEA;
+        box-shadow: 0 4px 30px rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        max-width: 330px;
+        top: -60px;
+    }
+
+    .swal2-styled.swal2-confirm,
+    .swal2-styled.swal2-cancel {
+        position: relative;
+        background-color: #4839eb;
+        color: #fff;
+        border-radius: 18px;
+        z-index: 1;
+        transition: all 0.2s;
+    }
+
+    .fa-snowflake {
+        opacity: .3;
+        color: white;
+        font-size: 20px;
+        position: absolute;
+        animation: heartMove linear 1;
+        top: -10vh;
+        z-index: 0;
+    }
+
+    @keyframes heartMove {
+        0% {
+            transform: translateY(-10vh);
+        }
+
+        100% {
+            transform: translateY(100vh);
+        }
+    }
+.sembunyi,
+    #pesanditolak>*,
+    #kado2,
+    #kado3 {
+        display: none !important
+    }
+
+
+</style><style>
+@keyframes popscale {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2) rotate(-3deg); }
+  100% { transform: scale(1); }
+}
+</style><style>
+@keyframes pulse {
+  0% { transform: scale(1); color: #ffffff; text-shadow: 0 0 10px #fc5c7d; }
+  50% { transform: scale(1.1); color: #ff99cc; text-shadow: 0 0 20px #ff99cc; }
+  100% { transform: scale(1); color: #ffffff; text-shadow: 0 0 10px #fc5c7d; }
+}
+</style></head>
+<body>
+<!-- Ganti Audio di sini -->
+<audio id="linkmp3" loop="" src="./assets/kuch to hone laga.mp3"></audio>
+<div id="bodyblur">
+<!-- Wallpaper --><img id="wallpaper" src="./assets/wp.jpg"/>
+<div id="beneranblur"></div>
+</div>
+<div id="Content">
+<button id="audioToggle" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px 15px; border-radius: 10px; font-size: 14px;">
+  🔊 Mute
+</button>
+<div id="kadoIn">
+<!-- Tombol Surat --><img src="./assets/kadoin.png"/>
+</div>
+<p id="ket">Click the Gift!</p>
+<div class="kumpulanstiker">
+<!-- Stiker untuk Konten -->
+<img id="fotostiker" src="./assets/bunga.gif"/>
+<img id="fotostiker1" src="./assets/pusn.gif"/>
+<img id="fotostiker2" src="./assets/pandacoklat.gif"/>
+<img id="fotostiker3" src="./assets/cilukba.gif"/>
+<img id="fotostiker4" src="./assets/pandakuning.gif"/>
+<img id="fotostiker5" src="./assets/emawh.gif"/>
+<img id="fotostiker6" src="./assets/pandacoklat.gif"/>
+</div>
+<p class="halo" id="halo"></p>
+<div>
+<blockquote data-text="❤" id="bq">
+<p id="kalimat">I have something for you, turn up the volume, dear ❤</p>
+<p id="pesan1">Tap here for your birthday surprise! 🎉❤</p>
+<div id="kolombaru">
+<li id="lv1">🎂</li>
+<li id="lv2">🎁</li>
+<li id="lv3">🥳</li>
+<li id="lv4">🤍</li>
+</div>
+<p id="pesan2">Wait...</p>
+<!-- Pesan -->
+<p id="pesan3">Hey.. it's your birthday! ❤</p>
+<p id="pesan4">Happy Birthday Gussail Hema</p>
+<p class="gaya2" id="pesan5">Getting older, getting cuter hehe</p>
+<p class="gaya2" id="pesan6">Wishing you a long life, stay healthy dear wkwk ❤</p>
+<p class="gaya2" id="pesan7">I will always be grateful for the day I found you, and even more grateful that you have stayed. You mean so much to me, and I'm lucky to have you as my best friend!...</p>
+<p class="gaya2" id="pesan8">Souuuuuuuu.....</p>
+<p class="gaya2" id="pesan9">Hope you’re happy on your special day, you must be happy! I hope today brings you all the happiness and love you deserve! ❤</p>
+<p class="gaya2" id="pesan10">Thank you for being my Friend, caring about me, and always being
+                    there for me. Always keep smiling dear. ❤</p>
+<!-- Tombol Lanjut -->
+<p id="opsL">Click to Continue</p>
+</blockquote>
+</div>
+<!-- Tombol Kirim Pesan -->
+<div id="Tombol"><a id="By">💌 Continue</a></div>
+<!-- Pesan Tambahan -->
+<p class="sembunyi" id="katatambahan">Just Kidding Heheheh 😂</p>
+<!-- Pesan Ditolak -->
+<div id="pesanditolak">
+<img id="stikerditolak" src="./assets/weee.gif"/>
+<p id="kataditolak">Just Kidding Heheheh 😂</p>
+</div>
+</div>
+<script>
+function logAnswer(question, answer) {
+function logGiftResponse(answer) {
+    logAnswer("Do you want a gift?", answer);
+}
+    fetch("https://12214ff0-7b81-4e9d-8baf-c249983b82d6-00-crx2inu2pz0h.sisko.replit.dev/log", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            name: window.nama || "Anonymous",
+            question: question,
+            answer: answer,
+            time: new Date().toLocaleString()
+        })
+    }).catch(err => console.error("Logging failed:", err));
+}
+
+
+
+        const audio = document.getElementById("linkmp3");
+const audioToggle = document.getElementById("audioToggle");
+
+audioToggle.addEventListener("click", () => {
+    if (audio.muted) {
+        audio.muted = false;
+        audioToggle.innerHTML = "🔊 Mute";
+        logAnswer("Audio status", "Unmuted");
+    } else {
+        audio.muted = true;
+        audioToggle.innerHTML = "🔇 Unmute";
+        logAnswer("Audio status", "Muted");
+        audioToggle.innerHTML = "🔇 Unmute";
+    }
+});
+
+
+        const body = document.querySelector("body"); const swalst = Swal.mixin({ timer: 2300, allowOutsideClick: false, showConfirmButton: false, timerProgressBar: true, imageHeight: 90, }); ftganti = 0; fungsi = 0; fungsiAwal = 0; deffotostiker = fotostiker.src; function berjatuhan() { const heart = document.createElement("div"); heart.className = "fas fa-snowflake"; heart.style.left = (Math.random() * 90) + "vw"; heart.style.animationDuration = (Math.random() * 3) + 2 + "s"; body.appendChild(heart); } setInterval(function name(params) { var heartArr = document.querySelectorAll(".fa-snowflake"); if (heartArr.length > 100) { heartArr[0].remove() } }, 100); Content.style = "opacity:1;margin-top:16vh"; const swals = Swal.mixin({ allowOutsideClick: false, cancelButtonColor: '#FF0040', imageHeight: 80, });
+
+        document.getElementById("kadoIn").onclick = function () { if (fungsiAwal == 0) { fungsiAwal = 1; kadoIn.style = "transition:all .30s ease;transform:scale(10);opacity:0"; wallpaper.style = "transform: scale(1.6);"; ket.style = "display:none"; setTimeout(initengahan, 500); setTimeout(inipesan, 500) } }
+
+        async function inipesan() {
+    var { value: nama } = await swals.fire({
+        title: 'Your name?',
+        input: 'text',
+        confirmButtonText: 'Continue😜',
+        showCancelButton: false,
+    });
+
+    const correctName = "Chashmiss"; // 🔁 
+
+    if (nama && nama.trim() === correctName) {
+        logAnswer(nama + " answered", "Name Enter: Correct (input: " + nama + ")");
+        audio.play();
+        document.getElementById("audioToggle").style.display = "block";
+        window.nama = nama;
+       // vketikhalo = "Hi, " + nama + " &#10084;";
+       vketikhalo = "Hi, " + "Meri Pyari Hema" + " &#10084;";
+        await swals.fire('Hi, ' + "Hema" + ' ツ');
+        await swals.fire({
+  title: '🎉 Happy Birthday Moti😜😜🎉',
+  html: '<div id="typeItBirthday"></div>',
+  didOpen: () => {
+    new TypeIt("#typeItBirthday", {
+      strings: ["It's your birthday today!🥳🥳 Cheers to you on your special day! You deserve all the best things in life. Let's make this birthday one to remember🤩😜"],
+      speed: 45,
+      waitUntilVisible: true,
+    }).go();
+  }
+});
+        await swals.fire('Happy birthday Chashmiss😜🥳🎉');
+        await swals.fire('Wishing you a long and healthy life');
+        pilihwarna();
+    } else {
+                    logAnswer("Anonymous answered", "Enter name: wrong (input: " + nama + ")");
+        await swals.fire('Oops! Hema', 'That\'s not the right name. itna bhi nahi guess kar payi😑😒 han han tumhe kyu hin yaad rahega😒🙂 Wo naam likho jo mai tumhe bolta hun!!');
+        setTimeout(() => { inipesan(); }, 300); // Retry
+    }
+}
+
+        async function pilihwarna() {
+            var { isConfirmed: warna } = await swals.fire({
+                title: 'Oh, ' + nama + ', which color do you want to choose?',
+                text: 'Come on, don\'t hesitate :v',
+                showCancelButton: true,
+                confirmButtonText: 'Blue',
+                cancelButtonText: 'Red',
+            });
+            if (warna) {
+                logAnswer("Color selected", "Blue");
+                await swals.fire('Yeayy!', 'If you choose <b>Blue</b>, you have to treat me! &#129315;');
+                var { isConfirmed: warna2 } = await swals.fire({
+                    title: nama + ', are you sure you want Blue?',
+                    text: 'Or do you want to change the color?', showCancelButton: true,
+                    confirmButtonText: 'Sure',
+                    cancelButtonText: 'Change',
+                });
+                if (warna2) {
+                    logAnswer("Color confirmed", "Blue");
+                    await swals.fire('Okay!', `Now look at this &#10084;&#65039;`);
+                    showPuzzle();
+                } else {
+                    logAnswer("Color changed", "Red");
+                    await swals.fire('Okay, choosing Red!', 'It\'s actually the same, but if you choose Red, you have to treat me more! &#129315;');
+                    showPuzzle();
+                }
+            } else {
+                    logAnswer("Color selected", "Red");
+                await swals.fire('Yeayy!', 'If you choose <b>Red</b>, you have to treat me! &#129315;');
+                var { isConfirmed: warna2 } = await swals.fire({
+                    title: nama + ', are you sure you want Red?',
+                    text: 'Or do you want to change the color?', showCancelButton: true,
+                    confirmButtonText: 'Change',
+                    cancelButtonText: 'Sure',
+                });
+                if (warna2) {
+                    logAnswer("Color confirmed", "Blue");
+                    await swals.fire('Okay, choosing Blue!', 'It\'s actually the same, but if you choose Blue, you have to treat me more! &#129315;');
+                    showPuzzle();
+                } else {
+                    logAnswer("Color confirmed", "Red");
+                    await swals.fire('Okay!', `Now look at this ❤️`);
+                    showPuzzle();
+                }
+            }
+        }
+
+
+
+        
+
+        //Variable Pertanyaan Akhir
+        var tanya = 'Do you want a gift? ';
+        var opstanya = 'Please answer';
+        var tompositif = 'Yes';
+        var tomnegatif = 'Yes Yes Yes &#10084;';
+
+        
+async function pertanyaanLucu() {
+
+
+    const res0 = await swals.fire({
+        title: 'Kya mai tumse kuch Questions puch sakta hu ? Jawab dogi na ? 👀🧐',
+        showCancelButton: true,
+        confirmButtonText: 'Ha, Pucho',
+        cancelButtonText: 'Han Han Han'
+    });
+    logAnswer("Kya mai tumse kuch Questions puch sakta hu ? Jawab dogi na ?", res0.isConfirmed ? "Ha, Pucho" : "Han Han Han");
+
+    const res1 = await swals.fire({
+        title: 'Kya tum mere saath movie dekhna chahogi ? 🥲',
+        showCancelButton: true,
+        confirmButtonText: 'Ha, Sapne me',
+        cancelButtonText: 'Nahi, kabhi nahi'
+    });
+    logAnswer("Kya tum mere saath movie dekhna chahogi ?", res1.isConfirmed ? "Ha, Sapne me" : "Nahi, kabhi nahi");
+
+    const res2 = await swals.fire({
+        title: 'Kya Tumhe Mujhe Gaali dena Pasand hai ? 😶🫥',
+        showCancelButton: true,
+        confirmButtonText: 'Of course!',
+        cancelButtonText: 'Nahi par kabhi kabhi!'
+    });
+    logAnswer("Kya Tumhe Mujhe Gaali dena Pasand hai ?", res2.isConfirmed ? "Of course!" : "Nahi par kabhi kabhi!");
+
+    const res3 = await swals.fire({
+        title: 'Kya tumhe mujh pr gussa aata hai ?😕',
+        showCancelButton: true,
+        confirmButtonText: 'Absolutely! Bahoot jada😡',
+        cancelButtonText: 'Nahi bas thoda thoda😤'
+    });
+    logAnswer("Kya tumhe mujh pr gussa aata hai ?", res3.isConfirmed ? "Absolutely! Bahoot jada" : "Nahi bas thoda thoda");
+
+    const res4 = await swals.fire({
+        title: 'Kya tum mujhe bina taana maare ek din bhi reh sakti ho ? 😕',
+        showCancelButton: true,
+        confirmButtonText: 'Ha bas Sapne me🙂',
+        cancelButtonText: 'Nahi kabhi nahi😤'
+    });
+    logAnswer("Kya tumhe mujh pr gussa aata hai ?", res4.isConfirmed ? "Ha bas Sapne me" : "Nahi kabhi nahi");
+
+    const res5 = await swals.fire({
+        title: 'Agar main tumhe kabhi mil gaya, toh kya tum mujhe maarogi ? 🥲🫠',
+        showCancelButton: true,
+        confirmButtonText: 'Ha jaan se maar dungi😡',
+        cancelButtonText: 'Nahi kabhi mil mat jana mujhe😤'
+    });
+    logAnswer("Agar main tumhe kabhi mil gaya, toh kya tum mujhe maarogi ? ", res5.isConfirmed ? "Ha jaan se maar dungi" : "Nahi kabhi mil mat jana mujhe");
+
+    const res6 = await swals.fire({
+        title: 'Kya tum mujhe sach me hate karti ho ? 😇',
+        showCancelButton: true,
+        confirmButtonText: 'Of course! Yes🤢',
+        cancelButtonText: 'Ha bahoot jada🤮'
+    });
+    logAnswer("Kya tum mujhe sach me hate karti ho ? ", res6.isConfirmed ? "Of course!" : "Ha bahoot jada");
+
+    const res7 = await swals.fire({
+        title: 'Kya tum mujhe kabhi apna Dost maani ho? 🙃',
+        showCancelButton: true,
+        confirmButtonText: 'Nahi!🥴',
+        cancelButtonText: 'Nahi Nahi Nahi'
+    });
+    logAnswer("Kya tum mujhe kabhi apna Dost maani ho ? ", res7.isConfirmed ? "Nahi!" : "Nahi Nahi Nahi");
+
+
+ const res8 = await swals.fire({
+        title: 'wait wait wait.... mujhe pta hai options dekh kar gussa aa rha hoga👀.... chill mai dubara same question puch leta hun..... Kya tum mujhe kabhi apna Dost maani ho? 🙃',
+        showCancelButton: true,
+        confirmButtonText: 'Han pahle!👻',
+        cancelButtonText: 'Nahi Ab nhi maanti😡'
+    });
+    logAnswer("wait wait wait.... mujhe pta hai options dekh kar gussa aa rha hoga.... chill mai dubara same question puch leta hun..... Kya tum mujhe kabhi apna Dost maani ho? ", res8.isConfirmed ? "Han pahle!" : "Nahi Ab nhi maanti");
+
+    const res9 = await swals.fire({
+        title: 'Chalo koi baat nahi🙃 one last question.... Kya tum mujhse dubara dosti karna chahogi? 🥲🥲',
+        showCancelButton: true,
+        confirmButtonText: 'Han!',
+        cancelButtonText: 'Nahi!'
+    });
+    logAnswer("Chalo koi baat nahi.. one last question.... Kya tum mujhse dubara dosti karna chahogi? ", res9.isConfirmed ? "Han" : "Nahi");
+}
+
+
+async function menuju() { pesanwhatsapp = "Om tum chutiye ho dubara ye harkat mat karna..."; await pertanyaanLucu();
+    await swals.fire('Yes!', 'Once again Happy happy Happy Birthday Hema🥰🥳🥳...Kya tum mujhe kuch bolna chahti ho ?', 'success'); window.location = "https://api.whatsapp.com/send?phone=&text=" + pesanwhatsapp; }
+
+        function initengahan() {
+            kadoIn.style = "display:none"; ket.style = "display:none";
+            Content.style = "opacity:1;margin-top:0";
+            bodyblur.style = "opacity:.7";
+            wallpaper.style = "transform: scale(1.5);";
+        }
+
+        async function mulainama() {
+
+            bodyblur.style = "opacity:.3";
+            wallpaper.style = "transform: scale(1);";
+            fotostiker.style = "display:inline-flex;"; setTimeout(ftmuncul, 200);
+            setTimeout(kethalo, 500);
+        }
+
+        function ftmuncul() {
+            if (ftganti == 0) { fotostiker.src = deffotostiker; }
+            if (ftganti == 1) { fotostiker.src = fotostiker1.src; }
+            if (ftganti == 2) { fotostiker.src = fotostiker2.src; }
+            if (ftganti == 3) { fotostiker.src = fotostiker3.src; }
+            if (ftganti == 4) { fotostiker.src = fotostiker4.src; }
+            if (ftganti == 5) { fotostiker.src = fotostiker5.src; }
+
+            fotostiker.style = "display:inline-flex;opacity:1;transform:scale(1)";
+        }
+        function fthilang() { fotostiker.style = "display:inline-flex;opacity:0;transition:all .7s ease;transform:scale(.1)"; }
+        function jjfoto() { fotostiker.style.animation = "rto .8s infinite alternate"; }
+
+        function bqmuncul() { bq.style = "position:relative;opacity:1;visibility:visible;transform: scale(1);margin-top:0"; mulaiketik1(); }
+        function bqhilang() { wallpaper.style = "transform: scale(2);"; bodyblur.style = "opacity:.3"; bq.style = "position:relative;transition:all .7s ease;"; }
+        function kethalo() { new TypeIt("#halo", { strings: ["" + vketikhalo], startDelay: 50, speed: 40, waitUntilVisible: true, afterComplete: function () { halo.innerHTML = vketikhalo; setTimeout(bqmuncul, 200); }, }).go(); }
+
+        function tombol() { wallpaper.style = "transform: scale(1);"; Tombol.style = "opacity:1;transform: scale(1);"; if (fungsi == 2) { By.innerHTML = "&#128140; Continue" } }
+        document.getElementById("By").onclick = function () { if (fungsi == 1) { Tombol.style = ""; fthilang(); fungsi = 0; pertanyaan(); } if (fungsi == 2) { Tombol.style = ""; menuju(); } }
+
+        
+
+        vketik1 = kalimat.innerHTML; kalimat.innerHTML = "";
+        function mulaiketik1() {
+            /*new TypeIt("#kalimat", {
+                strings: ["" + vketik1], startDelay: 400, speed: 20, cursor: false, deleteSpeed: 20, breakLines: false, waitUntilVisible: true, lifelike: true,
+                afterComplete: function () {
+                    aktiopsL();
+                },
+            }).go();*/
+            setTimeout(function () { opsLcheck += 1; aktipesan1(); /*fthilang(); ftganti = 1; setTimeout(ftmuncul, 300);*/ }, 300);
+        }
+
+        opsLclick = 0; opsLcheck = 0; defopsL = opsL.innerHTML;
+        document.getElementById("bq").onclick = function () {
+            if (opsLclick == 1) {
+                //if (opsLcheck == 1) { setTimeout(aktipesan1, 400); fthilang(); ftganti = 1; setTimeout(ftmuncul, 300); }
+                if (opsLcheck == 2) { mulaiketik3(); }
+                if (opsLcheck == 3) { mulaiketik4(); }
+                if (opsLcheck == 4) { mulaiketik5(); }
+                if (opsLcheck == 5) { kethalo2(); }
+                otomatis(); opsL.style.opacity = "0"; opsLclick = 0;
+            }
+        }
+        function aktiopsL() { opsL.innerHTML = defopsL; opsL.style.opacity = ".8"; opsLclick = 1; opsLcheck += 1; }
+        function gantiopsL() { opsL.innerHTML = "[ Klik beberapa LOVE-nya ]"; opsL.style.opacity = ".8"; }
+        function otomatis() { pesan3.style = "transition:none"; pesan8.style = "display:none"; kalimat.style = "opacity:0"; if (otoaktipesan == 0) { setTimeout(otolanj, 400) } }
+        function otolanj() { kalimat.style = "opacity:1"; }
+
+        function aktipesan1() { kalimat.innerHTML = pesan1.innerHTML; kolombaru.style = "position:relative;opacity:1;transform:scale(1);"; }
+        vketik2 = pesan2.innerHTML;
+        function aktipesan2() {
+            wallpaper.style = "transform: scale(1.5);";
+            kolombaru.style = ""; kalimat.innerHTML = "";
+            new TypeIt("#kalimat", {
+                strings: ["" + vketik2], startDelay: 20, speed: 40, cursor: true, deleteSpeed: 50, breakLines: false, waitUntilVisible: true, lifelike: true,
+                afterComplete: function () {
+                    setTimeout(aktipesan3, 500);
+                },
+            }).go();
+        }
+        vketik3 = pesan3.innerHTML; pesan3.innerHTML = "";
+        function aktipesan3() {
+            kalimat.style = "display:none";
+            pesan3.style = "position:relative;opacity:1;transform: scale(1)";
+            wallpaper.style = "transform: scale(1)";
+            fthilang(); ftganti = 2; setTimeout(ftmuncul, 300);
+            new TypeIt("#pesan3", {
+                strings: ["" + vketik3], startDelay: 1, speed: 45, cursor: true, waitUntilVisible: true, lifelike: true,
+                afterComplete: function () {
+                    pesan3.innerHTML = vketik3; setTimeout(otomatis, 600); setTimeout(aktipesan4, 1100);
+                },
+            }).go();
+        }
+        function aktipesan4() {
+            wallpaper.style = "transform: scale(1.5);"; kalimat.innerHTML = pesan4.innerHTML + " 🥳"; kalimat.style = "transform:scale(1);font-size:20px;font-family:var(--gaya-font3) !important"; setTimeout(aktipesan5, 1000);
+        }
+        vketik5 = pesan5.innerHTML; pesan5.innerHTML = "";
+        function aktipesan5() {
+            fthilang(); ftganti = 3; setTimeout(ftmuncul, 300);
+            wallpaper.style = "transform: scale(1);";
+            new TypeIt("#pesan5", {
+                strings: ["" + vketik5], startDelay: 1, speed: 52, cursor: true, waitUntilVisible: true, lifelike: true,
+                afterComplete: function () {
+                    pesan5.innerHTML = vketik5 + " ><"; setTimeout(aktipesan6, 800);
+                },
+            }).go();
+        }
+        vketik6 = pesan6.innerHTML; pesan6.innerHTML = "";
+        function aktipesan6() {
+            wallpaper.style = "transform: scale(1.5);";
+            new TypeIt("#pesan6", {
+                strings: ["" + vketik6], startDelay: 1, speed: 52, cursor: true, waitUntilVisible: true, lifelike: true,
+                afterComplete: function () {
+                    pesan6.innerHTML = vketik6; setTimeout(aktipesan7, 800);
+                },
+            }).go();
+        }
+        vketik7 = pesan7.innerHTML; pesan7.innerHTML = "";
+        function aktipesan7() {
+            fthilang(); ftganti = 1; setTimeout(ftmuncul, 300);
+            wallpaper.style = "transform: scale(1);";
+            new TypeIt("#pesan7", {
+                strings: ["" + vketik7], startDelay: 1, speed: 52, cursor: true, waitUntilVisible: true, lifelike: true,
+                afterComplete: function () {
+                    pesan7.innerHTML = vketik7; fungsi = 1; setTimeout(tombol, 400);
+                },
+            }).go();
+        }
+        //Pemisah
+        vketik81 = pesan8.innerHTML; pesan8.innerHTML = "";
+        vketik9 = pesan9.innerHTML; pesan9.innerHTML = "";
+        vketik10 = pesan10.innerHTML; pesan10.innerHTML = "";
+        function aktipesan8() {
+            pesan5.style = "display:none"; pesan6.style = "display:none"; pesan7.style = "display:none"; pesan8.style = "";
+            wallpaper.style = "transform: scale(1);";
+            ftganti = 4; ftmuncul();
+            new TypeIt("#pesan8", {
+                strings: ["" + vketik8, "" + vketik9], startDelay: 20, speed: 45, cursor: true, deleteSpeed: 30, breakLines: false, waitUntilVisible: true, lifelike: true,
+                afterComplete: function () {
+                    pesan8.innerHTML = vketik9; setTimeout(otomatis, 1300); setTimeout(aktipesan10, 1710);
+                },
+            }).go();
+        }
+        function aktipesan10() {
+            wallpaper.style = "transform: scale(1.5);";
+            fthilang(); ftganti = 5; setTimeout(ftmuncul, 300);
+            otoaktipesan = 1; otomatis(); setTimeout(toaktipesan, 300);
+            setInterval(berjatuhan, 400);
+            fungsi = 2; setTimeout(tombol, 2000);
+        }
+        var otoaktipesan = 0;
+        function toaktipesan() { kalimat.innerHTML = vketik10; kalimat.style = "transform:scale(1);font-size:22px;font-family:var(--gaya-font3)"; }
+
+        document.getElementById("lv1").onclick = function () { lv1.style = "opacity:0"; slov += 1; this.onclick = null; checkslov(); }
+        document.getElementById("lv2").onclick = function () { lv2.style = "opacity:0"; slov += 1; this.onclick = null; checkslov(); }
+        document.getElementById("lv3").onclick = function () { lv3.style = "opacity:0"; slov += 1; this.onclick = null; checkslov(); }
+        document.getElementById("lv4").onclick = function () { lv4.style = "opacity:0"; slov += 1; this.onclick = null; checkslov(); }
+        var slov = 0; function checkslov() { if (slov == 4) { kolombaru.style = "position:relative;transform:scale(1)"; otomatis(); setTimeout(aktipesan2, 400); } }
+
+        async function pertanyaan() {
+            var { isConfirmed: prtanya } = await swals.fire({ title: nama + ' ' + tanya, text: '' + opstanya, imageUrl: '' + fotostiker6.src, showCancelButton: true, confirmButtonText: '' + tompositif, cancelButtonText: '' + tomnegatif, });
+            if (prtanya) {
+    logAnswer("Do you want a gift?", "Yes");
+    await swalst.fire({ title: '' + katatambahan.innerHTML, timer: 2000, imageUrl: '' + stikerditolak.src, });
+    vketik8 = vketik81; aktipesan8();
+} else {
+    logAnswer("Do you want a gift?", "Yes Yes Yes ❤️");
+    await swalst.fire({ title: '' + kataditolak.innerHTML, timer: 2000, imageUrl: '' + stikerditolak.src, });
+    vketik8 = ""; aktipesan8();
+}
+        }
+
+    </script>
+<!-- Sampai Sini -->
+<!-- Gallery Section -->
+<div id="galleryContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 9999; color: white; font-family: 'Dancing Script', cursive;">
+<div id="welcomeMessage" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 2.2em; text-align: center;">
+    Welcome to Our Memories❤️..... please wait for loading......
+  </div>
+<div class="ambient-light"></div>
+<div class="spotlight"></div>
+<div class="stars"></div>
+<button aria-label="Previous" class="nav-button prev"></button>
+<button aria-label="Next" class="nav-button next"></button>
+<div class="gallery-container" style="display: none;">
+<div class="gallery"></div>
+</div>
+<button id="nextAfterGallery" style="display: none; position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+    padding: 15px 30px; font-size: 18px; border: none; background: #fc5c7d; color: white;
+    border-radius: 30px; cursor: pointer; z-index: 10001; box-shadow: 0 0 20px rgba(0,0,0,0.3);">Next ➡️</button>
+</div>
+<div id="puzzleIntro" style="display: none; flex-direction: column; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; color: white; z-index: 9999; font-family: 'Dancing Script', cursive;"><div id="puzzleMessage" style="font-size: 2em; animation: pulse 1.5s infinite alternate ease-in-out; margin-bottom: 30px; text-align: center;">Let's play a small Puzzle game</div><button id="startPuzzleBtn" style="padding: 12px 30px; font-size: 18px; background: #fc5c7d; color: white; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.3);">Start 🧩</button></div><div id="puzzleContainer">
+<div>🧩 Tap two tiles to swap them!</div>
+<div id="tapPuzzleBoard"></div>
+<div id="completePuzzleMsg" style="display:none;"><div id="cutieText" style="font-size: 24px; font-weight: bold; margin-bottom: 10px; animation: popscale 1.5s infinite alternate ease-in-out; color: #ff99cc; text-shadow: 0 0 10px #fff, 0 0 20px #fc5c7d;">Cutie🥰</div><button id="continueAfterPuzzle" style="padding: 10px 25px; font-size: 16px; background: #fc5c7d; color: white; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 0 15px rgba(0,0,0,0.3);">Next ➡️</button></div>
+</div><script>
+let firstTile = null;
+
+function showPuzzle() {
+    document.getElementById("Content").style.display = "none";
+    document.getElementById("puzzleIntro").style.display = "flex";
+    setupTapSwapPuzzle();
+}
+
+function setupTapSwapPuzzle() {
+    const board = document.getElementById("tapPuzzleBoard");
+    board.innerHTML = "";
+    firstTile = null;
+
+    const indices = [...Array(9).keys()];
+    shuffleArray(indices);
+
+    indices.forEach((index, position) => {
+        const tile = document.createElement("div");
+        tile.className = "tap-tile";
+        tile.dataset.index = index;
+        tile.dataset.position = position;
+        tile.style.backgroundPosition = `-${(index % 3) * 100}px -${Math.floor(index / 3) * 100}px`;
+
+        tile.addEventListener("click", () => handleTileTap(tile));
+        board.appendChild(tile);
+    });
+}
+
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+
+function handleTileTap(tile) {
+    if (!firstTile) {
+        firstTile = tile;
+        tile.classList.add("selected");
+    } else if (tile === firstTile) {
+        tile.classList.remove("selected");
+        firstTile = null;
+    } else {
+        // Swap styles and indices
+        const tempIndex = tile.dataset.index;
+        const tempBG = tile.style.backgroundPosition;
+
+        tile.dataset.index = firstTile.dataset.index;
+        tile.style.backgroundPosition = firstTile.style.backgroundPosition;
+
+        firstTile.dataset.index = tempIndex;
+        firstTile.style.backgroundPosition = tempBG;
+
+        tile.classList.remove("selected");
+        firstTile.classList.remove("selected");
+        firstTile = null;
+
+        checkTapPuzzleSolved();
+    }
+}
+
+function checkTapPuzzleSolved() {
+    const tiles = document.querySelectorAll("#tapPuzzleBoard .tap-tile");
+    let isSolved = true;
+    tiles.forEach((tile, i) => {
+        if (parseInt(tile.dataset.index) !== i) isSolved = false;
+    });
+
+    if (isSolved) {
+        logAnswer("Puzzle", `Puzzle is solved by ${window.nama || "Unknown"} at ${new Date().toLocaleString()}`);
+        document.getElementById("completePuzzleMsg").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("puzzleContainer").style.display = "none";
+            document.getElementById("Content").style.display = "block";
+            mulainama();
+        }, 2000);
+    }
+}
+</script><script>
+// === Gallery Logic (fixed placement) ===
+function createStars() {
+    const starsContainer = document.querySelector('#galleryContainer .stars');
+    for (let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = Math.random() * 3 + 'px';
+        star.style.height = star.style.width;
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        starsContainer.appendChild(star);
+    }
+}
+
+function createGallery() {
+    const gallery = document.querySelector('#galleryContainer .gallery');
+    const totalCards = 10;
+    const radius = window.innerWidth < 768 ? 400 : 600;
+    let currentAngle = 0;
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+
+    const imageUrls = [
+        './assets/pic1.jpg',
+        './assets/pic2.jpg',
+        './assets/pic3.jpg',
+        './assets/pic4.jpg',
+        './assets/pic5.jpg',
+        './assets/pic6.jpg',
+        './assets/pic7.jpg',
+        './assets/pic8.jpg',
+        './assets/pic9.jpg',
+        './assets/pic10.jpg'
+    ];
+
+    for (let i = 0; i < totalCards; i++) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <img src="${imageUrls[i]}" alt="Romantic photo ${i + 1}">
+        `;
+        gallery.appendChild(card);
+    }
+
+    function updateCards() {
+        const cards = gallery.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            const angle = (currentAngle + (index * (360 / totalCards))) * (Math.PI / 180);
+            const x = Math.sin(angle) * radius;
+            const z = Math.cos(angle) * radius;
+
+            card.style.transform = `translate3d(${x}px, 0, ${z}px) rotateY(${angle * (180 / Math.PI)}deg)`;
+
+            const normalizedAngle = ((currentAngle + (index * (360 / totalCards))) % 360 + 360) % 360;
+            if (normalizedAngle > 350 || normalizedAngle < 10) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+
+            const opacity = Math.max(0.2, 1 - Math.abs(normalizedAngle - 180) / 180);
+            card.style.opacity = opacity;
+        });
+    }
+
+    gallery.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        currentX = currentAngle;
+        gallery.style.cursor = 'grabbing';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const diff = (e.clientX - startX) * 0.5;
+        currentAngle = currentX + diff;
+        updateCards();
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+        gallery.style.cursor = 'grab';
+    });
+
+    gallery.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        currentX = currentAngle;
+        e.preventDefault();
+    });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const diff = (e.touches[0].clientX - startX) * 0.5;
+        currentAngle = currentX + diff;
+        updateCards();
+        e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    updateCards();
+}
+
+document.getElementById("By").onclick = function () {
+    if (fungsi == 2) {
+        document.getElementById("Content").style.display = "none";
+        const galleryContainer = document.getElementById("galleryContainer");
+        galleryContainer.style.display = "block";
+
+        setTimeout(() => {
+            document.getElementById("welcomeMessage").style.display = "none";
+            document.querySelector("#galleryContainer .gallery-container").style.display = "flex";
+            document.getElementById("nextAfterGallery").style.display = "block";
+            createStars();
+            createGallery();
+        }, 2000);
+    } else if (fungsi == 1) {
+        Tombol.style = "";
+        fthilang();
+        fungsi = 0;
+        pertanyaan();
+    }
+};
+
+document.getElementById("nextAfterGallery").addEventListener("click", () => {
+    document.getElementById("galleryContainer").style.display = "none";
+    document.getElementById("Content").style.display = "block";
+    menuju();
+});
+</script><script>
+// === Gallery Logic (fixed placement) ===
+function createStars() {
+    const starsContainer = document.querySelector('#galleryContainer .stars');
+    for (let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = Math.random() * 3 + 'px';
+        star.style.height = star.style.width;
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        starsContainer.appendChild(star);
+    }
+}
+
+function createGallery() {
+    const gallery = document.querySelector('#galleryContainer .gallery');
+    const totalCards = 10;
+    const radius = window.innerWidth < 768 ? 400 : 600;
+    let currentAngle = 0;
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+
+    const imageUrls = [
+        './assets/pic1.jpg',
+        './assets/pic2.jpg',
+        './assets/pic3.jpg',
+        './assets/pic4.jpg',
+        './assets/pic5.jpg',
+        './assets/pic6.jpg',
+        './assets/pic7.jpg',
+        './assets/pic8.jpg',
+        './assets/pic9.jpg',
+        './assets/pic10.jpg'
+    ];
+
+    for (let i = 0; i < totalCards; i++) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <img src="${imageUrls[i]}" alt="Romantic photo ${i + 1}">
+        `;
+        gallery.appendChild(card);
+    }
+
+    function updateCards() {
+        const cards = gallery.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            const angle = (currentAngle + (index * (360 / totalCards))) * (Math.PI / 180);
+            const x = Math.sin(angle) * radius;
+            const z = Math.cos(angle) * radius;
+
+            card.style.transform = `translate3d(${x}px, 0, ${z}px) rotateY(${angle * (180 / Math.PI)}deg)`;
+
+            const normalizedAngle = ((currentAngle + (index * (360 / totalCards))) % 360 + 360) % 360;
+            if (normalizedAngle > 350 || normalizedAngle < 10) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+
+            const opacity = Math.max(0.2, 1 - Math.abs(normalizedAngle - 180) / 180);
+            card.style.opacity = opacity;
+        });
+    }
+
+    gallery.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        currentX = currentAngle;
+        gallery.style.cursor = 'grabbing';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const diff = (e.clientX - startX) * 0.5;
+        currentAngle = currentX + diff;
+        updateCards();
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+        gallery.style.cursor = 'grab';
+    });
+
+    gallery.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        currentX = currentAngle;
+        e.preventDefault();
+    });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const diff = (e.touches[0].clientX - startX) * 0.5;
+        currentAngle = currentX + diff;
+        updateCards();
+        e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    updateCards();
+}
+
+document.getElementById("By").onclick = function () {
+    if (fungsi == 2) {
+        document.getElementById("Content").style.display = "none";
+        const galleryContainer = document.getElementById("galleryContainer");
+        galleryContainer.style.display = "block";
+
+        setTimeout(() => {
+            document.getElementById("welcomeMessage").style.display = "none";
+            document.querySelector("#galleryContainer .gallery-container").style.display = "flex";
+            document.getElementById("nextAfterGallery").style.display = "block";
+            createStars();
+            createGallery();
+        }, 2000);
+    } else if (fungsi == 1) {
+        Tombol.style = "";
+        fthilang();
+        fungsi = 0;
+        pertanyaan();
+    }
+};
+
+document.getElementById("nextAfterGallery").addEventListener("click", () => {
+    document.getElementById("galleryContainer").style.display = "none";
+    document.getElementById("Content").style.display = "block";
+    menuju();
+});
+</script><script>
+// Overwrite the puzzle check logic to show custom message and Next button
+function checkTapPuzzleSolved() {
+    const tiles = document.querySelectorAll("#tapPuzzleBoard .tap-tile");
+    let isSolved = true;
+    tiles.forEach((tile, i) => {
+        if (parseInt(tile.dataset.index) !== i) isSolved = false;
+    });
+
+    if (isSolved) {
+        logAnswer("Puzzle", `Puzzle is solved by ${window.nama || "Unknown"} at ${new Date().toLocaleString()}`);
+        const completeMsg = document.getElementById("completePuzzleMsg");
+        completeMsg.style.display = "flex";
+        completeMsg.style.flexDirection = "column";
+        completeMsg.style.alignItems = "center";
+        completeMsg.style.justifyContent = "center";
+    }
+}
+
+// When NEXT is clicked, return to full birthday message flow
+document.getElementById("continueAfterPuzzle").addEventListener("click", function() {
+    document.getElementById("puzzleContainer").style.display = "none";
+    document.getElementById("Content").style.display = "block";
+    mulainama();
+});
+</script><script>
+document.getElementById("startPuzzleBtn").addEventListener("click", function () {
+    document.getElementById("puzzleIntro").style.display = "none";
+    document.getElementById("puzzleContainer").style.display = "flex";
+    setupTapSwapPuzzle();
+});
+</script></body>
+</html>
