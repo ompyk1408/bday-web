@@ -891,10 +891,9 @@ document.getElementById("nextAfterGallery").addEventListener("click", () => {
 <p class="gaya2" id="pesan6">Wishing you a long life, stay healthy dear wkwk ❤</p>
 <p class="gaya2" id="pesan7">I will always be grateful for the day I found you, and even more grateful that you have stayed. You mean so much to me, and I'm lucky to have you as my best friend!...</p>
 <p class="gaya2" id="pesan8">Souuuuuuuu.....</p>
-<p class="gaya2" id="pesan9">Hope you’re happy on your special day, you must be happy! I worked hard to
-                    make this, I even learned how to do it! ❤</p>
-<p class="gaya2" id="pesan10">Thank you for being my biggest support, caring about me, and always being
-                    there for me. Love you, dear. ❤</p>
+<p class="gaya2" id="pesan9">Hope you’re happy on your special day, you must be happy! I hope today brings you all the happiness and love you deserve! ❤</p>
+<p class="gaya2" id="pesan10">Thank you for being my Friend, caring about me, and always being
+                    there for me. Always keep smiling dear. ❤</p>
 <!-- Tombol Lanjut -->
 <p id="opsL">Click to Continue</p>
 </blockquote>
@@ -953,7 +952,7 @@ audioToggle.addEventListener("click", () => {
     var { value: nama } = await swals.fire({
         title: 'Your name?',
         input: 'text',
-        confirmButtonText: 'Continue',
+        confirmButtonText: 'Continue😜',
         showCancelButton: false,
     });
 
@@ -1047,34 +1046,93 @@ audioToggle.addEventListener("click", () => {
 
         
 async function pertanyaanLucu() {
-    const res1 = await swals.fire({
-        title: 'Do you snore while dreaming about cake? 😴🍰',
+
+
+    const res0 = await swals.fire({
+        title: 'Kya mai tumse kuch Questions puch sakta hu ? Jawab dogi na ? 👀🧐',
         showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No, I eat it in dreams 🍰'
+        confirmButtonText: 'Ha, Pucho',
+        cancelButtonText: 'Han Han Han'
     });
-    logAnswer("Do you snore while dreaming about cake?", res1.isConfirmed ? "Yes" : "No, I eat it in dreams 🍰");
+    logAnswer("Kya mai tumse kuch Questions puch sakta hu ? Jawab dogi na ?", res0.isConfirmed ? "Ha, Pucho" : "Han Han Han");
+
+    const res1 = await swals.fire({
+        title: 'Kya tum mere saath movie dekhna chahogi ? 🥲',
+        showCancelButton: true,
+        confirmButtonText: 'Ha, Sapne me',
+        cancelButtonText: 'Nahi, kabhi nahi'
+    });
+    logAnswer("Kya tum mere saath movie dekhna chahogi ?", res1.isConfirmed ? "Ha, Sapne me" : "Nahi, kabhi nahi");
 
     const res2 = await swals.fire({
-        title: 'Would you fight someone for the last slice of pizza? 🍕',
+        title: 'Kya Tumhe Mujhe Gaali dena Pasand hai ? 😶🫥',
         showCancelButton: true,
         confirmButtonText: 'Of course!',
-        cancelButtonText: 'Nah, I’ll bake one'
+        cancelButtonText: 'Nahi par kabhi kabhi!'
     });
-    logAnswer("Would you fight someone for the last slice of pizza?", res2.isConfirmed ? "Of course!" : "Nah, I’ll bake one");
+    logAnswer("Kya Tumhe Mujhe Gaali dena Pasand hai ?", res2.isConfirmed ? "Of course!" : "Nahi par kabhi kabhi!");
 
     const res3 = await swals.fire({
-        title: 'Is your birthday an excuse to eat 3x more? 😋',
+        title: 'Kya tumhe mujh pr gussa aata hai ?😕',
         showCancelButton: true,
-        confirmButtonText: 'Absolutely!',
-        cancelButtonText: 'No comment...'
+        confirmButtonText: 'Absolutely! Bahoot jada😡',
+        cancelButtonText: 'Nahi bas thoda thoda😤'
     });
-    logAnswer("Is your birthday an excuse to eat 3x more?", res3.isConfirmed ? "Absolutely!" : "No comment...");
+    logAnswer("Kya tumhe mujh pr gussa aata hai ?", res3.isConfirmed ? "Absolutely! Bahoot jada" : "Nahi bas thoda thoda");
+
+    const res4 = await swals.fire({
+        title: 'Kya tum mujhe bina taana maare ek din bhi reh sakti ho ? 😕',
+        showCancelButton: true,
+        confirmButtonText: 'Ha bas Sapne me🙂',
+        cancelButtonText: 'Nahi kabhi nahi😤'
+    });
+    logAnswer("Kya tumhe mujh pr gussa aata hai ?", res4.isConfirmed ? "Ha bas Sapne me" : "Nahi kabhi nahi");
+
+    const res5 = await swals.fire({
+        title: 'Agar main tumhe kabhi mil gaya, toh kya tum mujhe maarogi ? 🥲🫠',
+        showCancelButton: true,
+        confirmButtonText: 'Ha jaan se maar dungi😡',
+        cancelButtonText: 'Nahi kabhi mil mat jana mujhe😤'
+    });
+    logAnswer("Agar main tumhe kabhi mil gaya, toh kya tum mujhe maarogi ? ", res5.isConfirmed ? "Ha jaan se maar dungi" : "Nahi kabhi mil mat jana mujhe");
+
+    const res6 = await swals.fire({
+        title: 'Kya tum mujhe sach me hate karti ho ? 😇',
+        showCancelButton: true,
+        confirmButtonText: 'Of course! Yes🤢',
+        cancelButtonText: 'Ha bahoot jada🤮'
+    });
+    logAnswer("Kya tum mujhe sach me hate karti ho ? ", res6.isConfirmed ? "Of course!" : "Ha bahoot jada");
+
+    const res7 = await swals.fire({
+        title: 'Kya tum mujhe kabhi apna Dost maani ho? 🙃',
+        showCancelButton: true,
+        confirmButtonText: 'Nahi!🥴',
+        cancelButtonText: 'Nahi Nahi Nahi'
+    });
+    logAnswer("Kya tum mujhe kabhi apna Dost maani ho ? ", res7.isConfirmed ? "Nahi!" : "Nahi Nahi Nahi");
+
+
+ const res8 = await swals.fire({
+        title: 'wait wait wait.... mujhe pta hai options dekh kar gussa aa rha hoga👀.... chill mai dubara same question puch leta hun..... Kya tum mujhe kabhi apna Dost maani ho? 🙃',
+        showCancelButton: true,
+        confirmButtonText: 'Han pahle!👻',
+        cancelButtonText: 'Nahi Ab nhi maanti😡'
+    });
+    logAnswer("wait wait wait.... mujhe pta hai options dekh kar gussa aa rha hoga.... chill mai dubara same question puch leta hun..... Kya tum mujhe kabhi apna Dost maani ho? ", res8.isConfirmed ? "Han pahle!" : "Nahi Ab nhi maanti");
+
+    const res9 = await swals.fire({
+        title: 'Chalo koi baat nahi🙃 one last question.... Kya tum mujhse dubara dosti karna chahogi? 🥲🥲',
+        showCancelButton: true,
+        confirmButtonText: 'Han!',
+        cancelButtonText: 'Nahi!'
+    });
+    logAnswer("Chalo koi baat nahi.. one last question.... Kya tum mujhse dubara dosti karna chahogi? ", res9.isConfirmed ? "Han" : "Nahi");
 }
 
 
-async function menuju() { pesanwhatsapp = "Thank you for wishing " + nama + " a happy birthday ><"; await pertanyaanLucu();
-    await swals.fire('OK!', 'Once again Happy happy Happy Birthday Hema...', 'success'); window.location = "https://api.whatsapp.com/send?phone=&text=" + pesanwhatsapp; }
+async function menuju() { pesanwhatsapp = "Om tum chutiye to dubara ye harkat mat karna..."; await pertanyaanLucu();
+    await swals.fire('Yes!', 'Once again Happy happy Happy Birthday Hema🥰🥳🥳...Kya tum mujhe kuch bolna chahti ho ?', 'success'); window.location = "https://api.whatsapp.com/send?phone=&text=" + pesanwhatsapp; }
 
         function initengahan() {
             kadoIn.style = "display:none"; ket.style = "display:none";
@@ -1108,7 +1166,7 @@ async function menuju() { pesanwhatsapp = "Thank you for wishing " + nama + " a 
         function bqhilang() { wallpaper.style = "transform: scale(2);"; bodyblur.style = "opacity:.3"; bq.style = "position:relative;transition:all .7s ease;"; }
         function kethalo() { new TypeIt("#halo", { strings: ["" + vketikhalo], startDelay: 50, speed: 40, waitUntilVisible: true, afterComplete: function () { halo.innerHTML = vketikhalo; setTimeout(bqmuncul, 200); }, }).go(); }
 
-        function tombol() { wallpaper.style = "transform: scale(1);"; Tombol.style = "opacity:1;transform: scale(1);"; if (fungsi == 2) { By.innerHTML = "&#128140; Send" } }
+        function tombol() { wallpaper.style = "transform: scale(1);"; Tombol.style = "opacity:1;transform: scale(1);"; if (fungsi == 2) { By.innerHTML = "&#128140; Continue" } }
         document.getElementById("By").onclick = function () { if (fungsi == 1) { Tombol.style = ""; fthilang(); fungsi = 0; pertanyaan(); } if (fungsi == 2) { Tombol.style = ""; menuju(); } }
 
         
@@ -1249,7 +1307,7 @@ async function menuju() { pesanwhatsapp = "Thank you for wishing " + nama + " a 
 <!-- Gallery Section -->
 <div id="galleryContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 9999; color: white; font-family: 'Dancing Script', cursive;">
 <div id="welcomeMessage" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 2.2em; text-align: center;">
-    Welcome to Our Gallery ❤️
+    Welcome to Our Memories❤️..... please wait for loading......
   </div>
 <div class="ambient-light"></div>
 <div class="spotlight"></div>
